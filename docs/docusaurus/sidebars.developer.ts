@@ -199,7 +199,7 @@ const sidebars = {
                     type: "link",
                 },
                 {
-                    href: "/docs/rules/overview",
+                    href: "/docs/rules/",
                     label: "📋 Rule overview",
                     type: "link",
                 },

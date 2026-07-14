@@ -12,7 +12,7 @@ export default function ResourcesPage(): React.JSX.Element {
             description:
                 "Go back to the rule overview and grouped sidebar when you need the public reference tree.",
             title: "Rule docs",
-            to: "/docs/rules/overview",
+            to: "/docs/rules/",
         },
         {
             description:
@@ -56,7 +56,7 @@ export default function ResourcesPage(): React.JSX.Element {
                             <div className="site-actions">
                                 <Link
                                     className="button button--primary button--lg"
-                                    to="/docs/rules/overview"
+                                    to="/docs/rules/"
                                 >
                                     Browse docs
                                 </Link>

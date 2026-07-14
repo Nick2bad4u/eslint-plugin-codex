@@ -108,7 +108,7 @@ export const homePrimaryCards = [
             "Browse the rule catalog, overview guidance, and stable documentation routes used by the plugin metadata.",
         icon: "rules",
         title: "Rule Reference",
-        to: "/docs/rules/overview",
+        to: "/docs/rules/",
     },
 ] as const satisfies readonly SiteLinkCard[];
 
@@ -201,7 +201,7 @@ export const resourceGroups = [
                     "See the high-level coverage model and the design goals behind the rule set.",
                 icon: "🧭",
                 title: "Rule overview",
-                to: "/docs/rules/overview",
+                to: "/docs/rules/",
             },
             {
                 cta: "Compare presets",

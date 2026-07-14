@@ -327,7 +327,7 @@ const config = {
                         {
                             className: "footer-link footer-link--rules",
                             label: "\u{EA96} Rule overview",
-                            to: "/docs/rules/overview",
+                            to: "/docs/rules/",
                         },
                         {
                             className: "footer-link footer-link--presets",
@@ -435,7 +435,7 @@ const config = {
                 {
                     className: "navbar-link--rules",
                     label: "Rules",
-                    to: "/docs/rules/overview",
+                    to: "/docs/rules/",
                 },
                 {
                     className: "navbar-link--developer",

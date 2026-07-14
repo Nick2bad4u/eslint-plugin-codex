@@ -29,7 +29,7 @@ export default function ProjectPage(): React.JSX.Element {
             description:
                 "Return to the public rule overview and preset docs after checking project trust signals.",
             title: "Rule docs",
-            to: "/docs/rules/overview",
+            to: "/docs/rules/",
         },
     ] as const;
 
