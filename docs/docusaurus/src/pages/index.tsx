@@ -9,7 +9,10 @@ import {
     liveBadges,
 } from "../components/siteData";
 
-/** Render the public landing page for \@typpi/eslint-plugin-codex documentation. */
+/**
+ * Render the public landing page for `@typpi/eslint-plugin-codex`
+ * documentation.
+ */
 export default function Home(): React.JSX.Element {
     const logoSource = useBaseUrl("/img/logo.svg");
 

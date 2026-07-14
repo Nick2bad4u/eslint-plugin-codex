@@ -4,7 +4,7 @@
  */
 import type { ESLint } from "eslint";
 
-/** Default \@typpi/eslint-plugin-codex plugin export shape. */
+/** Default `@typpi/eslint-plugin-codex` plugin export shape. */
 declare const plugin: ESLint.Plugin;
 
 export default plugin;

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * Public plugin entrypoint for \@typpi/eslint-plugin-codex.
+ * Public plugin entrypoint for `@typpi/eslint-plugin-codex`.
  */
 import type { ESLint, Linter } from "eslint";
 import type { Except } from "type-fest";
@@ -52,10 +52,10 @@ export type CodexPresetLayer = Linter.Config & {
     rules: NonNullable<Linter.Config["rules"]>;
 };
 
-/** Fully qualified \@typpi/eslint-plugin-codex rule identifiers. */
+/** Fully qualified `@typpi/eslint-plugin-codex` rule identifiers. */
 export type CodexRuleId = `codex/${CodexRuleName}`;
 
-/** Unqualified rule names supported by \@typpi/eslint-plugin-codex. */
+/** Unqualified rule names supported by `@typpi/eslint-plugin-codex`. */
 export type CodexRuleName = keyof typeof codexRules;
 
 type CodexConfigsContract = Record<CodexConfigName, CodexPresetConfig>;
