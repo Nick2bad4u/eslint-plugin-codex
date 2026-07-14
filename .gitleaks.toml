@@ -5,7 +5,7 @@ title = "eslint-plugin-codex secret detection configuration"
 
 [[allowlists]]
     description = "Ignore generated and dependency artifacts"
-    paths = [
+    paths       = [
         '''(^|/)\.cache/''',
         '''(^|/)coverage/''',
         '''(^|/)dist/''',
