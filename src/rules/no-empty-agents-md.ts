@@ -8,7 +8,7 @@ import { isAgentsFilePath } from "../_internal/codex-file-kind.js";
 import { createCodexRule } from "../_internal/create-codex-rule.js";
 import {
     extractFrontmatter,
-    getMeaningfulMarkdownBody,
+    hasMeaningfulMarkdownBody,
 } from "../_internal/frontmatter.js";
 import {
     createMarkdownDocumentListener,
@@ -26,11 +26,7 @@ const noEmptyAgentsMdRule: CodexRuleModule = createCodexRule({
 
             const sourceText = context.sourceCode.text;
             const frontmatter = extractFrontmatter(sourceText);
-            const body = getMeaningfulMarkdownBody(
-                frontmatter?.body ?? sourceText
-            );
-
-            if (body.length > 0) {
+            if (hasMeaningfulMarkdownBody(frontmatter?.body ?? sourceText)) {
                 return;
             }
 

@@ -22,6 +22,8 @@ describe("no-empty-agents-md", () => {
         "",
         "   \n",
         "<!-- placeholder -->\n",
+        "<!-- outer <!-- inner -->\n",
+        "<!-- unfinished comment\n",
     ])("reports empty instruction content %#", async (text) => {
         expect.hasAssertions();
 

@@ -95,6 +95,30 @@ export const hasFrontmatterField = (
     key: string
 ): boolean => objectHasOwn(document.data, key);
 
-/** Remove balanced HTML comments before checking Markdown body content. */
-export const getMeaningfulMarkdownBody = (text: string): string =>
-    text.replaceAll(/<!--[\s\S]*?-->/gv, "").trim();
+/** Determine whether Markdown contains non-comment, non-whitespace content. */
+export const hasMeaningfulMarkdownBody = (text: string): boolean => {
+    let cursor = 0;
+
+    while (cursor < text.length) {
+        const commentStart = text.indexOf("<!--", cursor);
+        const contentEnd = commentStart === -1 ? text.length : commentStart;
+
+        if (text.slice(cursor, contentEnd).trim().length > 0) {
+            return true;
+        }
+
+        if (commentStart === -1) {
+            return false;
+        }
+
+        const commentEnd = text.indexOf("-->", commentStart + 4);
+
+        if (commentEnd === -1) {
+            return false;
+        }
+
+        cursor = commentEnd + 3;
+    }
+
+    return false;
+};

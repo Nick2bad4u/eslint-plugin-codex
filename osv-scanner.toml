@@ -1,0 +1,14 @@
+[[IgnoredVulns]]
+    id          = "GHSA-5c6j-r48x-rmvq"
+    ignoreUntil = 2026-10-14
+    reason      = "Transitive Docusaurus static-build dependency that processes only trusted repository documentation and is absent from the published plugin. Remove when Docusaurus ships patched webpack dependencies."
+
+[[IgnoredVulns]]
+    id          = "GHSA-qj8w-gfj5-8c6v"
+    ignoreUntil = 2026-10-14
+    reason      = "Transitive Docusaurus static-build dependency that processes only trusted repository documentation and is absent from the published plugin. Remove when Docusaurus ships patched webpack dependencies."
+
+[[IgnoredVulns]]
+    id          = "GHSA-w5hq-g745-h8pq"
+    ignoreUntil = 2026-10-14
+    reason      = "Transitive sockjs dependency used only by the local Docusaurus development server. The project does not call the affected uuid buffer APIs, and uuid is absent from the published plugin."

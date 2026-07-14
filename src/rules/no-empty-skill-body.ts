@@ -8,7 +8,7 @@ import { isSkillFilePath } from "../_internal/codex-file-kind.js";
 import { createCodexRule } from "../_internal/create-codex-rule.js";
 import {
     extractFrontmatter,
-    getMeaningfulMarkdownBody,
+    hasMeaningfulMarkdownBody,
 } from "../_internal/frontmatter.js";
 import {
     createMarkdownDocumentListener,
@@ -27,7 +27,7 @@ const noEmptySkillBodyRule: CodexRuleModule = createCodexRule({
             const sourceText = context.sourceCode.text;
             const body = extractFrontmatter(sourceText)?.body ?? sourceText;
 
-            if (getMeaningfulMarkdownBody(body).length > 0) {
+            if (hasMeaningfulMarkdownBody(body)) {
                 return;
             }
 
