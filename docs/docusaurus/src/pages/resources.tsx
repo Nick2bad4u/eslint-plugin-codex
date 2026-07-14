@@ -31,9 +31,9 @@ export default function ResourcesPage(): React.JSX.Element {
     return (
         <Layout>
             <Head>
-                <title>Resources | eslint-plugin-codex</title>
+                <title>Resources | @typpi/eslint-plugin-codex</title>
                 <meta
-                    content="Developer resources for eslint-plugin-codex, including docs routes, contribution references, repository scripts, and community policies."
+                    content="Developer resources for @typpi/eslint-plugin-codex, including docs routes, contribution references, repository scripts, and community policies."
                     name="description"
                 />
             </Head>

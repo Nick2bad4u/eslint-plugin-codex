@@ -1,6 +1,6 @@
 # Support
 
-Thanks for using `eslint-plugin-codex`.
+Thanks for using `@typpi/eslint-plugin-codex`.
 
 ## How to get help
 
@@ -21,7 +21,7 @@ Please include:
 - Node.js version
 - TypeScript version
 - ESLint version
-- `eslint-plugin-codex` version
+- `@typpi/eslint-plugin-codex` version
 - Minimal reproduction snippet
 - Expected behavior and actual behavior
 

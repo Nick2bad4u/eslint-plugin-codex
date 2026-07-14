@@ -3,7 +3,7 @@
 Recommended checks plus security and ambiguity guardrails. Use this when Codex configuration is reviewed as production automation rather than personal local preference.
 
 ```js
-import codex from "eslint-plugin-codex";
+import codex from "@typpi/eslint-plugin-codex";
 
 export default [...codex.configs.strict];
 ```

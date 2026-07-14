@@ -2,7 +2,7 @@
 
 ## Project
 
-`eslint-plugin-codex` is an independent community ESLint plugin for objective checks over Codex customization files. It is not affiliated with or endorsed by OpenAI.
+`@typpi/eslint-plugin-codex` is an independent community ESLint plugin for objective checks over Codex customization files. It is not affiliated with or endorsed by OpenAI.
 
 The public package supports Node.js 22+, ESLint 9.15+/10 flat config, ESM, and CommonJS. Rules cover `AGENTS.md`, Agent Skills, Codex TOML configuration and custom agents, MCP servers, and lifecycle hooks in JSON or TOML.
 

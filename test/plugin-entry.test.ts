@@ -14,7 +14,7 @@ describe("plugin entry module", () => {
         expect.hasAssertions();
 
         expect(plugin.meta).toStrictEqual({
-            name: "eslint-plugin-codex",
+            name: "@typpi/eslint-plugin-codex",
             namespace: "codex",
             version: packageJson.version,
         });

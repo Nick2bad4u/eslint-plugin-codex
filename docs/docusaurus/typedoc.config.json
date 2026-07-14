@@ -20,7 +20,7 @@
     "includeHierarchySummary": true,
     "interfacePropertiesFormat": "table",
     "json": "docs/typedoc.json",
-    "name": "eslint-plugin-codex Documentation",
+    "name": "@typpi/eslint-plugin-codex Documentation",
     "navigationJson": "./site-docs/developer/api/navigation.json",
     "out": "./site-docs/developer/api",
     "parametersFormat": "table",

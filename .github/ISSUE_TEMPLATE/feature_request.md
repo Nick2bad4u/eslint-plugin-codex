@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest a new rule or improvement for eslint-plugin-codex
+about: Suggest a new rule or improvement for @typpi/eslint-plugin-codex
 title: "Feature: "
 labels:
  - enhancement

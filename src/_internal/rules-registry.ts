@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * Canonical runtime registry for every eslint-plugin-codex rule.
+ * Canonical runtime registry for every \@typpi/eslint-plugin-codex rule.
  */
 import type { CodexRuleModule } from "./create-codex-rule.js";
 import type { CodexRuleNamePattern } from "./rule-catalog.js";

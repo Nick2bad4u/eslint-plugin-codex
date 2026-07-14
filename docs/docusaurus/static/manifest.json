@@ -1,6 +1,6 @@
 {
     "background_color": "#111827",
-    "description": "eslint-plugin-codex documentation, rule reference pages, and Codex customization guidance.",
+    "description": "@typpi/eslint-plugin-codex documentation, rule reference pages, and Codex customization guidance.",
     "display": "standalone",
     "icons": [
         {
@@ -14,7 +14,7 @@
             "type": "image/png"
         }
     ],
-    "name": "eslint-plugin-codex Documentation",
+    "name": "@typpi/eslint-plugin-codex Documentation",
     "scope": ".",
     "short_name": "Codex Docs",
     "start_url": ".",

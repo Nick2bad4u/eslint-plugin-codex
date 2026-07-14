@@ -35,7 +35,7 @@ fixes.
 
 ## Security Best Practices for Users
 
-- Keep `eslint-plugin-codex`, ESLint, Codex tooling, and dependencies updated.
+- Keep `@typpi/eslint-plugin-codex`, ESLint, Codex tooling, and dependencies updated.
 - Run linting in CI on trusted code only.
 - Treat diagnostics as configuration-review prompts and verify permission, MCP, and hook changes before applying them.
 

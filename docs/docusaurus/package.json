@@ -1,9 +1,9 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
-    "name": "@eslint-plugin-codex/docs",
+    "name": "@typpi/eslint-plugin-codex-docs",
     "version": "0.1.0",
     "private": true,
-    "description": "Docusaurus documentation site for eslint-plugin-codex.",
+    "description": "Docusaurus documentation site for @typpi/eslint-plugin-codex.",
     "keywords": [
         "codex",
         "documentation",

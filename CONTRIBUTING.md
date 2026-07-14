@@ -1,4 +1,4 @@
-# Contributing to eslint-plugin-codex
+# Contributing to @typpi/eslint-plugin-codex
 
 Thanks for helping improve the plugin. It enforces objective Codex configuration contracts, so proposals need primary-source evidence and a clear false-positive boundary.
 

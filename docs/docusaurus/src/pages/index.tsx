@@ -9,16 +9,18 @@ import {
     liveBadges,
 } from "../components/siteData";
 
-/** Render the public landing page for eslint-plugin-codex documentation. */
+/** Render the public landing page for \@typpi/eslint-plugin-codex documentation. */
 export default function Home(): React.JSX.Element {
     const logoSource = useBaseUrl("/img/logo.svg");
 
     return (
         <Layout>
             <Head>
-                <title>eslint-plugin-codex | Codex repository linting</title>
+                <title>
+                    @typpi/eslint-plugin-codex | Codex repository linting
+                </title>
                 <meta
-                    content="eslint-plugin-codex validates Codex instructions, skills, agents, TOML configuration, MCP servers, and lifecycle hooks with flat-config-native presets."
+                    content="@typpi/eslint-plugin-codex validates Codex instructions, skills, agents, TOML configuration, MCP servers, and lifecycle hooks with flat-config-native presets."
                     name="description"
                 />
             </Head>
@@ -28,7 +30,7 @@ export default function Home(): React.JSX.Element {
                         <div className="home-hero__content">
                             <div className="home-hero__brand">
                                 <img
-                                    alt="eslint-plugin-codex logo"
+                                    alt="@typpi/eslint-plugin-codex logo"
                                     className="home-hero__logo"
                                     src={logoSource}
                                 />
@@ -38,7 +40,7 @@ export default function Home(): React.JSX.Element {
                             </div>
                             {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
                             <h1 className="home-hero__title">
-                                eslint-plugin-codex
+                                @typpi/eslint-plugin-codex
                             </h1>
                             <p className="home-hero__subtitle">
                                 Objective ESLint checks for Codex instructions,
@@ -67,13 +69,13 @@ export default function Home(): React.JSX.Element {
                             </div>
                         </div>
                         <aside
-                            aria-label="eslint-plugin-codex project mark"
+                            aria-label="@typpi/eslint-plugin-codex project mark"
                             className="home-hero__visual"
                         >
                             <div className="home-hero__art">
                                 <div className="home-hero__artGlow" />
                                 <img
-                                    alt="eslint-plugin-codex terminal and lint-check mark"
+                                    alt="@typpi/eslint-plugin-codex terminal and lint-check mark"
                                     className="home-hero__artImage"
                                     src={logoSource}
                                 />

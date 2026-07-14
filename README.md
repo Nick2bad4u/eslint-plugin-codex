@@ -1,6 +1,6 @@
-# eslint-plugin-codex
+# @typpi/eslint-plugin-codex
 
-[![npm](https://flat.badgen.net/npm/v/eslint-plugin-codex?color=blue)](https://www.npmjs.com/package/eslint-plugin-codex) [![CI](https://github.com/Nick2bad4u/eslint-plugin-codex/actions/workflows/ci.yml/badge.svg)](https://github.com/Nick2bad4u/eslint-plugin-codex/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/Nick2bad4u/eslint-plugin-codex/branch/main/graph/badge.svg)](https://codecov.io/gh/Nick2bad4u/eslint-plugin-codex) [![license](https://flat.badgen.net/npm/license/eslint-plugin-codex?color=purple)](LICENSE)
+[![npm](https://flat.badgen.net/npm/v/@typpi/eslint-plugin-codex?color=blue)](https://www.npmjs.com/package/@typpi/eslint-plugin-codex) [![CI](https://github.com/Nick2bad4u/eslint-plugin-codex/actions/workflows/ci.yml/badge.svg)](https://github.com/Nick2bad4u/eslint-plugin-codex/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/Nick2bad4u/eslint-plugin-codex/branch/main/graph/badge.svg)](https://codecov.io/gh/Nick2bad4u/eslint-plugin-codex) [![license](https://flat.badgen.net/npm/license/@typpi/eslint-plugin-codex?color=purple)](LICENSE)
 
 Objective ESLint checks for Codex customization files. The plugin validates the parts that can be checked statically—file placement, required metadata, supported configuration values, instruction budgets, MCP transports, and hook structure—without trying to judge prose quality.
 
@@ -20,7 +20,7 @@ The catalog deliberately excludes subjective prompt-style rules, model allowlist
 ## Installation
 
 ```sh
-npm install --save-dev eslint-plugin-codex eslint @eslint/markdown @eslint/json
+npm install --save-dev @typpi/eslint-plugin-codex eslint @eslint/markdown @eslint/json
 ```
 
 Requirements:
@@ -34,7 +34,7 @@ Requirements:
 The standard presets register the Markdown and JSON language plugins and configure TOML parsing:
 
 ```js
-import codex from "eslint-plugin-codex";
+import codex from "@typpi/eslint-plugin-codex";
 
 export default [...codex.configs.recommended];
 ```
@@ -42,7 +42,7 @@ export default [...codex.configs.recommended];
 If a shared config already registers `markdown` from `@eslint/markdown` and `json` from `@eslint/json`, use the corresponding `*-without-language-plugins` variant after that registration:
 
 ```js
-import codex from "eslint-plugin-codex";
+import codex from "@typpi/eslint-plugin-codex";
 import sharedConfig from "your-shared-eslint-config";
 
 export default [

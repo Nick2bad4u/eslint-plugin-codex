@@ -7,6 +7,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 const organizationName = "Nick2bad4u";
 const projectName = "eslint-plugin-codex";
+const packageName = "@typpi/eslint-plugin-codex";
 const baseUrl = process.env["DOCUSAURUS_BASE_URL"] ?? "/eslint-plugin-codex/";
 const siteOrigin = "https://nick2bad4u.github.io";
 const siteUrl = `${siteOrigin}${baseUrl}`;
@@ -149,7 +150,7 @@ const config = {
                 "@type": "WebSite",
                 description: siteDescription,
                 image: socialCardImageUrl,
-                name: "eslint-plugin-codex",
+                name: packageName,
                 publisher: {
                     "@type": "Person",
                     name: "Nick2bad4u",
@@ -351,7 +352,7 @@ const config = {
                         },
                         {
                             className: "footer-link footer-link--npm",
-                            href: "https://www.npmjs.com/package/eslint-plugin-codex",
+                            href: `https://www.npmjs.com/package/${packageName}`,
                             label: "\u{F1FA} npm package",
                         },
                         {
@@ -415,7 +416,7 @@ const config = {
                 name: "twitter:card",
             },
             {
-                content: "eslint-plugin-codex",
+                content: packageName,
                 property: "og:site_name",
             },
         ],
@@ -456,14 +457,14 @@ const config = {
                 },
             ],
             logo: {
-                alt: "eslint-plugin-codex logo",
+                alt: `${packageName} logo`,
                 height: 32,
                 href: baseUrl,
                 src: "img/logo.svg",
                 width: 32,
             },
             style: "dark",
-            title: "eslint-plugin-codex",
+            title: packageName,
         },
         prism: {
             additionalLanguages: [
@@ -518,7 +519,7 @@ const config = {
             },
         ],
     ],
-    title: "eslint-plugin-codex",
+    title: packageName,
     trailingSlash: true,
     url: siteOrigin,
 } satisfies Config;

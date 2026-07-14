@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
-  <title id="title">eslint-plugin-codex</title>
+<title id="title">@typpi/eslint-plugin-codex</title>
   <desc id="description">A terminal window with a code prompt and lint check mark.</desc>
   <defs>
     <linearGradient id="background" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">

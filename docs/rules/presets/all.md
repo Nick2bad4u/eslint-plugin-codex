@@ -3,7 +3,7 @@
 Every stable rule, including advisory project-hygiene checks. This preset is useful for plugin development, audits, and teams that prefer to opt out of individual rules explicitly.
 
 ```js
-import codex from "eslint-plugin-codex";
+import codex from "@typpi/eslint-plugin-codex";
 
 export default [...codex.configs.all];
 ```

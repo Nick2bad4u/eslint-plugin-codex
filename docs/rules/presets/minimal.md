@@ -3,7 +3,7 @@
 Essential structure checks for repositories that want the smallest useful policy. It catches empty instructions, unusable skill metadata, incomplete custom-agent definitions, and malformed hook containers.
 
 ```js
-import codex from "eslint-plugin-codex";
+import codex from "@typpi/eslint-plugin-codex";
 
 export default [...codex.configs.minimal];
 ```

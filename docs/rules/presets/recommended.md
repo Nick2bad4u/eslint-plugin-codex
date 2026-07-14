@@ -3,7 +3,7 @@
 Balanced default for most repositories. It includes essential structure plus current, objective Codex correctness checks with low false-positive risk.
 
 ```js
-import codex from "eslint-plugin-codex";
+import codex from "@typpi/eslint-plugin-codex";
 
 export default [...codex.configs.recommended];
 ```

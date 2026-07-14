@@ -185,7 +185,7 @@ const renderRulePage = (ruleName, rule) => {
         "The preset layers supply the correct Markdown, TOML, or JSON language configuration. Override the rule only in a later matching flat-config entry:",
         "",
         "```js",
-        'import codex from "eslint-plugin-codex";',
+        'import codex from "@typpi/eslint-plugin-codex";',
         "",
         "export default [",
         " ...codex.configs.recommended,",

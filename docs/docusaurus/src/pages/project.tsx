@@ -36,9 +36,9 @@ export default function ProjectPage(): React.JSX.Element {
     return (
         <Layout>
             <Head>
-                <title>Project | eslint-plugin-codex</title>
+                <title>Project | @typpi/eslint-plugin-codex</title>
                 <meta
-                    content="Project-level information for eslint-plugin-codex, including releases, changelog, package links, issues, security, and live quality badges."
+                    content="Project-level information for @typpi/eslint-plugin-codex, including releases, changelog, package links, issues, security, and live quality badges."
                     name="description"
                 />
             </Head>
@@ -55,8 +55,8 @@ export default function ProjectPage(): React.JSX.Element {
                             <p className="site-page-intro">
                                 This page collects the public project surfaces
                                 that matter when evaluating, adopting, or
-                                contributing to <code>eslint-plugin-codex</code>
-                                .
+                                contributing to{" "}
+                                <code>@typpi/eslint-plugin-codex</code>.
                             </p>
                             <div className="site-actions">
                                 <Link
@@ -67,7 +67,7 @@ export default function ProjectPage(): React.JSX.Element {
                                 </Link>
                                 <Link
                                     className="button button--secondary button--lg"
-                                    href="https://www.npmjs.com/package/eslint-plugin-codex"
+                                    href="https://www.npmjs.com/package/@typpi/eslint-plugin-codex"
                                 >
                                     Open npm package
                                 </Link>

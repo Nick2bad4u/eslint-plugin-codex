@@ -3,15 +3,15 @@
 ## Install
 
 ```sh
-npm install --save-dev eslint-plugin-codex eslint @eslint/markdown @eslint/json
+npm install --save-dev @typpi/eslint-plugin-codex eslint @eslint/markdown @eslint/json
 ```
 
-`eslint-plugin-codex` supports Node.js 22+, ESLint 9.15 and 10, and flat config.
+`@typpi/eslint-plugin-codex` supports Node.js 22+, ESLint 9.15 and 10, and flat config.
 
 ## Choose a preset
 
 ```js
-import codex from "eslint-plugin-codex";
+import codex from "@typpi/eslint-plugin-codex";
 
 export default [...codex.configs.recommended];
 ```
@@ -29,7 +29,7 @@ Always spread the selected preset. `recommended` is the normal starting point; `
 The normal variants register `@eslint/markdown` and `@eslint/json`. If an earlier shared config already registers those plugin namespaces, compose the external-registration variant instead:
 
 ```js
-import codex from "eslint-plugin-codex";
+import codex from "@typpi/eslint-plugin-codex";
 import sharedConfig from "your-shared-eslint-config";
 
 export default [
@@ -45,7 +45,7 @@ The TOML parser is configured directly in both variants.
 Place the override after the preset and match the file language:
 
 ```js
-import codex from "eslint-plugin-codex";
+import codex from "@typpi/eslint-plugin-codex";
 
 export default [
  ...codex.configs.recommended,

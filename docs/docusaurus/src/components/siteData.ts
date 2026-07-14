@@ -49,18 +49,20 @@ export function getSiteLinkProps(
 }
 
 const projectBase = "https://github.com/Nick2bad4u/eslint-plugin-codex";
+const npmPackageBase =
+    "https://www.npmjs.com/package/@typpi/eslint-plugin-codex";
 
 /** Live repository and package health badges rendered on public pages. */
 export const liveBadges = [
     {
         alt: "npm license",
         href: `${projectBase}/blob/main/LICENSE`,
-        src: "https://flat.badgen.net/npm/license/eslint-plugin-codex?color=6d28d9",
+        src: "https://flat.badgen.net/npm/license/@typpi/eslint-plugin-codex?color=6d28d9",
     },
     {
         alt: "npm downloads",
-        href: "https://www.npmjs.com/package/eslint-plugin-codex",
-        src: "https://flat.badgen.net/npm/dt/eslint-plugin-codex?color=ec4899",
+        href: npmPackageBase,
+        src: "https://flat.badgen.net/npm/dt/@typpi/eslint-plugin-codex?color=ec4899",
     },
     {
         alt: "latest GitHub release",
@@ -134,7 +136,7 @@ export const projectHighlights = [
         cta: "View package",
         description:
             "Inspect install metadata, versioning, and package distribution from npm.",
-        href: "https://www.npmjs.com/package/eslint-plugin-codex",
+        href: npmPackageBase,
         icon: "📦",
         title: "npm package",
     },

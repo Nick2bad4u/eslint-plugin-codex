@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `eslint-plugin-codex` will be documented here.
+All notable changes to `@typpi/eslint-plugin-codex` will be documented here.
 
 The project follows [Semantic Versioning](https://semver.org/).
 

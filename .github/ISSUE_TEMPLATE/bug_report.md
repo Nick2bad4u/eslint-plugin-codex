@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a reproducible bug in eslint-plugin-codex
+about: Report a reproducible bug in @typpi/eslint-plugin-codex
 title: "Bug: "
 labels:
  - bug
@@ -52,7 +52,7 @@ assignees: []
 - npm version:
 - ESLint version:
 - `@eslint/markdown` version:
-- `eslint-plugin-codex` version/commit:
+- `@typpi/eslint-plugin-codex` version/commit:
 - OS:
 
 ## Additional context

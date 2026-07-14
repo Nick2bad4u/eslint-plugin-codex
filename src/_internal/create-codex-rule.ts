@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * Shared typed rule creator used by eslint-plugin-codex.
+ * Shared typed rule creator used by \@typpi/eslint-plugin-codex.
  */
 import type { TSESLint } from "@typescript-eslint/utils";
 import type { UnknownArray } from "type-fest";

@@ -2,7 +2,7 @@ import type { ArrayValues } from "type-fest";
 
 /**
  * @packageDocumentation
- * Stable catalog identifiers for eslint-plugin-codex rules.
+ * Stable catalog identifiers for \@typpi/eslint-plugin-codex rules.
  */
 import { assertDefined, setHas } from "ts-extras";
 

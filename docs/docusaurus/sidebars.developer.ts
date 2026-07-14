@@ -174,7 +174,7 @@ const sidebars = {
             label: "⚙️ Runtime",
             link: {
                 description:
-                    "Runtime exports and the internal utility inventory behind eslint-plugin-codex.",
+                    "Runtime exports and the internal utility inventory behind @typpi/eslint-plugin-codex.",
                 slug: "/api/runtime",
                 title: "Runtime exports",
                 type: "generated-index",
@@ -209,7 +209,7 @@ const sidebars = {
                     type: "link",
                 },
                 {
-                    href: "https://www.npmjs.com/package/eslint-plugin-codex",
+                    href: "https://www.npmjs.com/package/@typpi/eslint-plugin-codex",
                     label: "📦 npm package",
                     type: "link",
                 },

@@ -1,6 +1,6 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
-    "name": "eslint-plugin-codex",
+    "name": "@typpi/eslint-plugin-codex",
     "version": "0.0.0",
     "private": false,
     "description": "Independent community ESLint rules for Codex customization files.",
@@ -282,6 +282,7 @@
         }
     },
     "publishConfig": {
+        "access": "public",
         "provenance": true,
         "registry": "https://registry.npmjs.org/"
     },

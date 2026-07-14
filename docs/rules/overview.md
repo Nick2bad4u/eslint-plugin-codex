@@ -5,7 +5,7 @@ slug: /
 
 # Rule overview
 
-`eslint-plugin-codex` checks Codex customization contracts that are objective enough to enforce without guessing what the author meant.
+`@typpi/eslint-plugin-codex` checks Codex customization contracts that are objective enough to enforce without guessing what the author meant.
 
 ## Coverage
 
