@@ -84,6 +84,8 @@ updates:
           - dependency-type: "direct"
       ignore:
           # Keep the docs workspace green too.
+          - dependency-name: "typescript"
+            update-types: ["version-update:semver-major"]
           - dependency-name: "form-data"
           - dependency-name: "qs"
           - dependency-name: "tough-cookie"
