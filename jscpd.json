@@ -1,0 +1,29 @@
+{
+    "absolute": false,
+    "blame": false,
+    "gitignore": true,
+    "ignore": [
+        "**/node_modules/**",
+        "**/.git/**",
+        "**/*.d.ts",
+        "**/*.{test,spec}.{js,jsx,ts,tsx}"
+    ],
+    "ignoreCase": false,
+    "maxLines": 10000,
+    "maxSize": "100kb",
+    "minLines": 10,
+    "minTokens": 50,
+    "mode": "mild",
+    "noSymlinks": false,
+    "output": "./reports/jscpd/",
+    "pattern": "**/*",
+    "reporters": [
+        "console",
+        "html",
+        "json"
+    ],
+    "silent": false,
+    "skipLocal": false,
+    "threshold": 5,
+    "verbose": false
+}

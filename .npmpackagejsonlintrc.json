@@ -1,0 +1,8 @@
+{
+    "$schema": "https://www.schemastore.org/npmpackagejsonlintrc.json",
+    "extends": "npm-package-json-lint-config-nick2bad4u",
+    "rules": {
+        "require-type": "off",
+        "require-types": "off"
+    }
+}

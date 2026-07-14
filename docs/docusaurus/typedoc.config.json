@@ -1,0 +1,39 @@
+{
+    "$schema": "https://typedoc-plugin-markdown.org/schema.json",
+    "classPropertiesFormat": "table",
+    "coverageOutputPath": "static/img/coverage",
+    "entryFileName": "README.md",
+    "entryPointStrategy": "expand",
+    "entryPoints": [
+        "../../src/plugin.ts",
+        "../../src/_internal"
+    ],
+    "extends": [
+        "typedoc-config-nick2bad4u/typedoc.json"
+    ],
+    "favicon": "./static/img/logo.svg",
+    "gitRemote": "origin",
+    "gitRevision": "main",
+    "githubPages": true,
+    "hideGenerator": false,
+    "hostedBaseUrl": "https://nick2bad4u.github.io/eslint-plugin-codex/",
+    "includeHierarchySummary": true,
+    "interfacePropertiesFormat": "table",
+    "json": "docs/typedoc.json",
+    "name": "eslint-plugin-codex Documentation",
+    "navigationJson": "./site-docs/developer/api/navigation.json",
+    "out": "./site-docs/developer/api",
+    "parametersFormat": "table",
+    "prettierConfigFile": "../../prettier.config.mjs",
+    "router": "member",
+    "searchGroupBoosts": {
+        "Classes": 1.5,
+        "Functions": 1.2,
+        "Interfaces": 1.3,
+        "Types": 1.1
+    },
+    "searchInComments": true,
+    "searchInDocuments": true,
+    "tsconfig": "./tsconfig.typedoc.json",
+    "typeDeclarationFormat": "table"
+}

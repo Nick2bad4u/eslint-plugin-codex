@@ -1,0 +1,7 @@
+# Repository-specific actionlint configuration.
+# yaml-language-server: $schema=https://www.schemastore.org/any.json
+
+config-variables: []
+paths: {}
+self-hosted-runner:
+    labels: []

@@ -1,0 +1,198 @@
+# Publish one verified npm package with trusted publishing, then create matching Git refs.
+# yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
+name: "Release"
+
+run-name: "${{ format('Release {0} by @{1}', inputs.version || inputs.release_type, github.actor) }}"
+
+on:
+    workflow_dispatch:
+        inputs:
+            release_type:
+                description: "SemVer bump when version is omitted"
+                required: true
+                default: "patch"
+                type: "choice"
+                options:
+                    - "patch"
+                    - "minor"
+                    - "major"
+            version:
+                description: "Explicit x.y.z version (overrides release_type)"
+                required: false
+                type: "string"
+
+concurrency:
+    group: "release-${{ github.repository }}"
+    cancel-in-progress: "${{ false }}"
+
+permissions:
+    contents: "read"
+
+defaults:
+    run:
+        shell: "bash"
+
+jobs:
+    publish:
+        name: "Verify and publish"
+        runs-on: "ubuntu-latest"
+        timeout-minutes: 60
+        permissions:
+            contents: "write"
+            id-token: "write"
+        env:
+            CI: "true"
+            NPM_REGISTRY_URL: "https://registry.npmjs.org"
+            RELEASE_NOTES_PATH: "temp/release-notes.md"
+
+        steps:
+            - name: "Harden the runner"
+              uses: "step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411" # v2.19.4
+              with:
+                  egress-policy: "audit"
+
+            - name: "Checkout main"
+              uses: "actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0" # v7.0.0
+              with:
+                  fetch-depth: 0
+                  fetch-tags: true
+                  ref: "main"
+
+            - name: "Setup Node.js and npm registry"
+              uses: "actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e" # v6.4.0
+              with:
+                  node-version-file: ".node-version"
+                  registry-url: "${{ env.NPM_REGISTRY_URL }}"
+                  cache: "npm"
+                  cache-dependency-path: "package-lock.json"
+
+            - name: "Setup Go for native scanners"
+              uses: "actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16" # v6.5.0
+              with:
+                  go-version: "stable"
+
+            - name: "Install dependencies"
+              run: "npm ci --force"
+
+            - name: "Install release verification tools"
+              run: |
+                  set -euo pipefail
+                  go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.7
+                  go install github.com/zricethezav/gitleaks/v8@v8.24.2
+                  echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+            - name: "Validate release input and bump package version"
+              id: "version"
+              env:
+                  EXPLICIT_VERSION: "${{ inputs.version }}"
+                  RELEASE_TYPE: "${{ inputs.release_type }}"
+              run: |
+                  set -euo pipefail
+                  explicit_version="${EXPLICIT_VERSION:-}"
+                  if [ -n "$explicit_version" ]; then
+                    if [[ ! "$explicit_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                      echo "Invalid version '$explicit_version'; use x.y.z." >&2
+                      exit 1
+                    fi
+                    npm version "$explicit_version" --no-git-tag-version
+                  else
+                    npm version "${RELEASE_TYPE:-patch}" --no-git-tag-version
+                  fi
+
+                  version=$(node -p "require('./package.json').version")
+                  package_name=$(node -p "require('./package.json').name")
+                  tag="v${version}"
+
+                  if git rev-parse --verify "refs/tags/${tag}" >/dev/null 2>&1; then
+                    echo "Tag ${tag} already exists." >&2
+                    exit 1
+                  fi
+
+                  if npm view "${package_name}@${version}" version >/dev/null 2>&1; then
+                    echo "${package_name}@${version} is already published." >&2
+                    exit 1
+                  fi
+
+                  {
+                    echo "package_name=$package_name"
+                    echo "tag=$tag"
+                    echo "version=$version"
+                  } >> "$GITHUB_OUTPUT"
+
+            - name: "Run the complete release gate"
+              run: "npm run release:check"
+
+            - name: "Verify generated version changes only"
+              run: |
+                  set -euo pipefail
+                  unexpected=$(git status --short | grep -Ev '^ M package(-lock)?\.json$' || true)
+                  if [ -n "$unexpected" ]; then
+                    echo "Release verification changed unexpected files:" >&2
+                    echo "$unexpected" >&2
+                    exit 1
+                  fi
+
+            - name: "Pack the exact publish artifact"
+              id: "pack"
+              run: |
+                  set -euo pipefail
+                  mkdir -p temp/package
+                  tarball=$(npm pack --pack-destination temp/package --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>process.stdout.write(JSON.parse(s)[0].filename))")
+                  tarball="temp/package/${tarball}"
+                  test -s "$tarball"
+                  echo "tarball=$tarball" >> "$GITHUB_OUTPUT"
+
+            - name: "Generate release notes"
+              env:
+                  TAG: "${{ steps.version.outputs.tag }}"
+              run: |
+                  set -euo pipefail
+                  npm run --silent changelog:release-notes -- --output "$RELEASE_NOTES_PATH" --tag "$TAG"
+                  if [ ! -s "$RELEASE_NOTES_PATH" ]; then
+                    echo "Initial public release." > "$RELEASE_NOTES_PATH"
+                  fi
+
+            - name: "Confirm main has not moved"
+              run: |
+                  set -euo pipefail
+                  git fetch origin main
+                  test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+
+            - name: "Publish to npm with trusted publishing"
+              run: "npm publish '${{ steps.pack.outputs.tarball }}' --access public --provenance"
+
+            - name: "Commit version and push commit plus tag atomically"
+              env:
+                  TAG: "${{ steps.version.outputs.tag }}"
+              run: |
+                  set -euo pipefail
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git add package.json package-lock.json
+                  git commit -m "chore: release ${TAG}"
+                  git tag -a "$TAG" -m "$TAG"
+                  git push --atomic origin HEAD:main "$TAG"
+
+            - name: "Create GitHub release"
+              uses: "softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b" # v3.0.1
+              with:
+                  body_path: "${{ env.RELEASE_NOTES_PATH }}"
+                  draft: false
+                  generate_release_notes: false
+                  name: "${{ steps.version.outputs.tag }}"
+                  prerelease: false
+                  tag_name: "${{ steps.version.outputs.tag }}"
+
+            - name: "Release summary"
+              if: "${{ !cancelled() }}"
+              env:
+                  PACKAGE_NAME: "${{ steps.version.outputs.package_name }}"
+                  TAG: "${{ steps.version.outputs.tag }}"
+                  VERSION: "${{ steps.version.outputs.version }}"
+              run: |
+                  {
+                    echo "## Release summary"
+                    echo ""
+                    echo "- Package: [${PACKAGE_NAME}@${VERSION}](https://www.npmjs.com/package/${PACKAGE_NAME}/v/${VERSION})"
+                    echo "- GitHub release: [${TAG}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${TAG})"
+                  } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,3 @@
+# Configuration endpoints that require non-GET requests or are URL prefixes.
+https://dashboard\.stryker-mutator\.io/api/reports
+https://nick2bad4u\.github\.io/?$

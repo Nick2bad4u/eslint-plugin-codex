@@ -1,0 +1,94 @@
+# This is a Dependabot configuration file for automating dependency updates.
+# The configuration is set to version 2 of the Dependabot schema.
+# yaml-language-server: $schema=https://www.schemastore.org/dependabot-2.0.json
+version: 2
+
+multi-ecosystem-groups:
+    dependabot-all:
+        schedule:
+            interval: "monthly"
+            time: "05:30"
+            timezone: "America/Detroit"
+        assignees:
+            - "Nick2bad4u"
+        target-branch: "main"
+        commit-message:
+            prefix: "[dependabot][all]"
+            prefix-development: "[dependabot][dev][all]"
+            include: "scope"
+        labels:
+            - "dependabot"
+            - "dependencies"
+
+updates:
+    - package-ecosystem: "github-actions"
+      cooldown:
+          default-days: 3
+          include: ["*"]
+      directory: "/"
+      allow:
+          # Allow both direct and indirect updates for all packages
+          - dependency-type: "all"
+      labels:
+          - "github-actions"
+      multi-ecosystem-group: "dependabot-all"
+      rebase-strategy: "auto"
+      patterns:
+          - "*"
+
+    - package-ecosystem: "npm"
+      cooldown:
+          default-days: 3
+          include: ["*"]
+      directory: "/"
+      rebase-strategy: "auto"
+      versioning-strategy: "increase"
+      allow:
+          # Limit version updates to declared dependencies. Updating every
+          # transitive lockfile package exceeds Dependabot's updater budget.
+          - dependency-type: "direct"
+      ignore:
+          # TypeScript 7 is outside the peer ranges supported by the current
+          # TypeScript-ESLint and TypeDoc toolchain. Keep 6.x updates enabled.
+          - dependency-name: "typescript"
+            update-types: ["version-update:semver-major"]
+          - dependency-name: "electron-builder"
+            versions: ["< 26.0.18"]
+          - dependency-name: "electron-builder-squirrel-windows"
+            versions: ["< 26.0.18"]
+            # Ignore local workspace dependencies completely
+          - dependency-name: "@shared/*"
+          - dependency-name: "file:*"
+          # Dependabot has been returning `unknown_error` for these three
+          # packages for weeks (no actionable error details). Ignoring them
+          # prevents Dependabot runs from repeatedly failing on the same items.
+          - dependency-name: "form-data"
+          - dependency-name: "qs"
+          - dependency-name: "tough-cookie"
+      labels:
+          - "npm"
+      multi-ecosystem-group: "dependabot-all"
+      patterns:
+          - "*"
+
+    - package-ecosystem: "npm"
+      cooldown:
+          default-days: 3
+          include: ["*"]
+      directory: "/docs/docusaurus"
+      rebase-strategy: "auto"
+      versioning-strategy: "increase"
+      allow:
+          # Limit version updates to declared dependencies. Updating every
+          # transitive lockfile package exceeds Dependabot's updater budget.
+          - dependency-type: "direct"
+      ignore:
+          # Keep the docs workspace green too.
+          - dependency-name: "form-data"
+          - dependency-name: "qs"
+          - dependency-name: "tough-cookie"
+      labels:
+          - "npm"
+      multi-ecosystem-group: "dependabot-all"
+      patterns:
+          - "*"

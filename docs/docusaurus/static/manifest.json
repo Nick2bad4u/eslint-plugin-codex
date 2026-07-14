@@ -1,0 +1,22 @@
+{
+    "background_color": "#111827",
+    "description": "eslint-plugin-codex documentation, rule reference pages, and Codex customization guidance.",
+    "display": "standalone",
+    "icons": [
+        {
+            "sizes": "192x192",
+            "src": "img/logo_192x192.png",
+            "type": "image/png"
+        },
+        {
+            "sizes": "512x512",
+            "src": "img/logo.png",
+            "type": "image/png"
+        }
+    ],
+    "name": "eslint-plugin-codex Documentation",
+    "scope": ".",
+    "short_name": "Codex Docs",
+    "start_url": ".",
+    "theme_color": "#312E81"
+}

@@ -1,0 +1,41 @@
+---
+title: Developer overview
+description: Maintainer-facing documentation for the eslint-plugin-codex docs site, generated surfaces, and developer workflows.
+---
+
+import Link from "@docusaurus/Link";
+
+# Developer overview
+
+This section is the maintainer-facing companion to the public docs site.
+
+Use it when you are changing the Docusaurus app, rule-reference navigation,
+generated README/preset surfaces, or published API documentation.
+
+## Start here
+
+- [Architecture](./architecture.md) explains how the public rule docs, project pages, and developer routes fit together.
+- [Workflow charts](./workflow-charts.md) maps the docs and generation flow that keeps the site aligned.
+- [ADRs](./adrs/index.md) captures the architectural decisions behind the current information architecture.
+- <Link to="/developer/api/">API reference</Link> is generated from the public `src/plugin.ts`
+  surface.
+
+## Related routes
+
+- <Link to="/docs/rules/overview">Rule overview</Link>
+- <Link to="/docs/rules/presets">Preset matrix</Link>
+- Public project page: `/project`
+- Public resources page: `/resources`
+
+## What belongs here
+
+This developer section is the right place for:
+
+1. docs architecture notes
+2. generation and sync workflows
+3. ADRs
+4. charts and process maps
+5. published API reference material
+
+It is **not** the place to duplicate end-user rule explanations. Keep those in
+`docs/rules/**`.

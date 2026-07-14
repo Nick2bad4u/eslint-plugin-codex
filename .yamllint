@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://www.schemastore.org/yamllint.json
+extends: "node_modules/yamllint-config-nick2bad4u/.yamllint"
+
+ignore: |
+    .cache/
+    .idea/
+    .vscode/
+    **/.stryker-tmp/**
+    **/.docusaurus/**
+    **/node_modules/*
+    **/node_modules/**
+    build/
+    coverage/
+    dist/
+    docs/Packages/**
+    docs/docusaurus/docs/documents/docs/Packages/**
+    node_modules
+    release/
+
+rules:
+    empty-values: "disable"

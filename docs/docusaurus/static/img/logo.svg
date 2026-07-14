@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">eslint-plugin-codex</title>
+  <desc id="description">A terminal window with a code prompt and lint check mark.</desc>
+  <defs>
+    <linearGradient id="background" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="124" y1="150" x2="392" y2="378" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect x="32" y="32" width="448" height="448" rx="104" fill="url(#background)"/>
+  <rect x="82" y="104" width="348" height="304" rx="38" fill="#0f172a" stroke="url(#accent)" stroke-width="16"/>
+  <path d="M90 174h332" stroke="#334155" stroke-width="14"/>
+  <circle cx="126" cy="140" r="10" fill="#f472b6"/>
+  <circle cx="160" cy="140" r="10" fill="#facc15"/>
+  <circle cx="194" cy="140" r="10" fill="#4ade80"/>
+  <path d="m144 238 62 54-62 54" fill="none" stroke="url(#accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="28"/>
+  <path d="M230 350h74" stroke="#e2e8f0" stroke-linecap="round" stroke-width="24"/>
+  <path d="m304 266 30 30 58-70" fill="none" stroke="#4ade80" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/>
+</svg>
