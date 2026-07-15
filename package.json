@@ -103,7 +103,7 @@
         "knip": "npx cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_NO_WARNINGS=1 npx knip -c knip.config.ts --cache --cache-location .cache/knip --treat-config-hints-as-errors --tsConfig tsconfig.json",
         "lint": "npx cross-env NODE_OPTIONS=--max_old_space_size=16384 npx eslint --cache --cache-strategy content --cache-location .cache/.eslintcache",
         "lint:action": "npm run lint:actions",
-        "lint:actions": "node scripts/lint-actionlint.mjs",
+        "lint:actions": "actionlint -color -shellcheck= -pyflakes=",
         "lint:all": "npm run lint && npm run lint:knip && npm run lint:dupes && npm run lint:css && npm run lint:prettier && npm run lint:remark && npm run lint:package && npm run lint:secretlint && npm run lint:gitleaks && npm run lint:yamllint && npm run lint:yaml && npm run lint:actions && npm run lint:circular",
         "lint:all:fix": "npm run lint:fix && npm run lint:remark:fix && npm run lint:css:fix && npm run lint:prettier:fix && npm run lint:remark && npm run lint:package && npm run lint:secretlint && npm run lint:gitleaks && npm run lint:yamllint && npm run lint:yaml:fix && npm run lint:actions && npm run lint:circular",
         "lint:all:fix:quiet": "npm run lint:fix:quiet && npm run lint:css:fix && npm run lint:prettier:fix && npm run lint:remark && npm run lint:package && npm run lint:secretlint && npm run lint:gitleaks && npm run lint:yamllint && npm run lint:yaml:fix && npm run lint:actions && npm run lint:circular",

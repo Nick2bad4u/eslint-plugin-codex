@@ -168,15 +168,45 @@ jobs:
 
             - name: "Generate release notes"
               env:
-                  TAG: "${{ steps.version.outputs.tag }}"
+                  EXPECTED_TAG: "${{ steps.version.outputs.tag }}"
+                  GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
               run: |
                   set -euo pipefail
+
+                  if [ -z "$EXPECTED_TAG" ]; then
+                    echo "::error::The release version step did not provide an expected tag."
+                    exit 1
+                  fi
+
+                  tag_ref="refs/tags/${EXPECTED_TAG}"
+                  if ! git show-ref --verify --quiet "$tag_ref"; then
+                    echo "::error::Expected local tag ${EXPECTED_TAG} does not exist."
+                    exit 1
+                  fi
+
+                  tag_commit=$(git rev-parse "${tag_ref}^{commit}")
+                  head_commit=$(git rev-parse HEAD)
+                  if [ "$tag_commit" != "$head_commit" ]; then
+                    echo "::error::Tag ${EXPECTED_TAG} points to ${tag_commit}, but HEAD is ${head_commit}."
+                    exit 1
+                  fi
+
+                  head_tags=$(git tag --points-at HEAD --sort=refname)
+                  if [ "$head_tags" != "$EXPECTED_TAG" ]; then
+                    displayed_head_tags=${head_tags//$'\n'/, }
+                    if [ -z "$displayed_head_tags" ]; then
+                      displayed_head_tags="(none)"
+                    fi
+                    echo "::error::Expected ${EXPECTED_TAG} to be the only tag at HEAD, but found: ${displayed_head_tags}."
+                    exit 1
+                  fi
+
                   notes_ready=false
                   for attempt in 1 2 3 4 5 6; do
                     rm -f "$RELEASE_NOTES_PATH"
                     if npm run --silent changelog:release-notes -- --output "$RELEASE_NOTES_PATH" \
                       && [ -s "$RELEASE_NOTES_PATH" ] \
-                      && grep -Fq "$TAG" "$RELEASE_NOTES_PATH"; then
+                      && grep -Fq "$EXPECTED_TAG" "$RELEASE_NOTES_PATH"; then
                       notes_ready=true
                       break
                     fi
@@ -185,12 +215,12 @@ jobs:
                       break
                     fi
 
-                    echo "Release notes for ${TAG} are not available yet; retrying (${attempt}/6)."
+                    echo "Release notes for ${EXPECTED_TAG} are not available yet; retrying (${attempt}/6)."
                     sleep "$((attempt * 2))"
                   done
 
                   if [ "$notes_ready" != true ]; then
-                    echo "git-cliff did not generate release notes for ${TAG}." >&2
+                    echo "git-cliff did not generate release notes for ${EXPECTED_TAG}." >&2
                     exit 1
                   fi
 
