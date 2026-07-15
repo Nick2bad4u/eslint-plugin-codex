@@ -1,7 +1,7 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
     "name": "@typpi/eslint-plugin-codex",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "private": false,
     "description": "Independent community ESLint rules for Codex customization files.",
     "keywords": [
