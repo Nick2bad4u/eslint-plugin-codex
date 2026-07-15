@@ -142,26 +142,13 @@ jobs:
                   test -s "$tarball"
                   echo "tarball=$tarball" >> "$GITHUB_OUTPUT"
 
-            - name: "Generate release notes"
-              env:
-                  TAG: "${{ steps.version.outputs.tag }}"
-              run: |
-                  set -euo pipefail
-                  npm run --silent changelog:release-notes -- --output "$RELEASE_NOTES_PATH" --tag "$TAG"
-                  if [ ! -s "$RELEASE_NOTES_PATH" ]; then
-                    echo "Initial public release." > "$RELEASE_NOTES_PATH"
-                  fi
-
             - name: "Confirm main has not moved"
               run: |
                   set -euo pipefail
                   git fetch origin main
                   test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
 
-            - name: "Publish to npm with trusted publishing"
-              run: "npm publish '${{ steps.pack.outputs.tarball }}' --access public --provenance"
-
-            - name: "Commit version and push commit plus tag atomically"
+            - name: "Create release commit and tag"
               env:
                   TAG: "${{ steps.version.outputs.tag }}"
               run: |
@@ -171,7 +158,44 @@ jobs:
                   git add package.json package-lock.json
                   git commit -m "chore: release ${TAG}"
                   git tag -a "$TAG" -m "$TAG"
+
+            - name: "Push release commit and tag atomically"
+              env:
+                  TAG: "${{ steps.version.outputs.tag }}"
+              run: |
+                  set -euo pipefail
                   git push --atomic origin HEAD:main "$TAG"
+
+            - name: "Generate release notes"
+              env:
+                  TAG: "${{ steps.version.outputs.tag }}"
+              run: |
+                  set -euo pipefail
+                  notes_ready=false
+                  for attempt in 1 2 3 4 5 6; do
+                    rm -f "$RELEASE_NOTES_PATH"
+                    if npm run --silent changelog:release-notes -- --output "$RELEASE_NOTES_PATH" \
+                      && [ -s "$RELEASE_NOTES_PATH" ] \
+                      && grep -Fq "$TAG" "$RELEASE_NOTES_PATH"; then
+                      notes_ready=true
+                      break
+                    fi
+
+                    if [ "$attempt" -eq 6 ]; then
+                      break
+                    fi
+
+                    echo "Release notes for ${TAG} are not available yet; retrying (${attempt}/6)."
+                    sleep "$((attempt * 2))"
+                  done
+
+                  if [ "$notes_ready" != true ]; then
+                    echo "git-cliff did not generate release notes for ${TAG}." >&2
+                    exit 1
+                  fi
+
+            - name: "Publish to npm with trusted publishing"
+              run: "npm publish '${{ steps.pack.outputs.tarball }}' --access public --provenance"
 
             - name: "Create GitHub release"
               uses: "softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b" # v3.0.1
