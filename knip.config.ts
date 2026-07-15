@@ -14,9 +14,7 @@ const knipConfig: KnipConfig = {
     ignoreBinaries: [
         "actionlint",
         "gitleaks",
-        "git-cz",
         "lychee",
-        "open-cli",
         // Knip treats the config path passed to `-c` as a binary name.
         "knip.config.ts",
     ],

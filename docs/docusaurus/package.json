@@ -34,20 +34,20 @@
         "build"
     ],
     "scripts": {
-        "build": "npm run docs:api && docusaurus build",
-        "build:fast": "npm run docs:api && cross-env DOCUSAURUS_ENABLE_EXPERIMENTAL=true docusaurus build",
-        "build:local": "npm run docs:api && docusaurus build",
-        "clear": "docusaurus clear",
-        "deploy": "docusaurus deploy",
-        "docs:api": "typedoc --options typedoc.config.json",
-        "docusaurus": "docusaurus",
-        "serve": "docusaurus serve",
-        "start": "npm run docs:api && docusaurus start --host localhost",
-        "start:devtools": "npm run docs:api && cross-env DOCUSAURUS_BASE_URL=/ docusaurus start --host localhost",
+        "build": "npm run docs:api && npx docusaurus build",
+        "build:fast": "npm run docs:api && npx cross-env DOCUSAURUS_ENABLE_EXPERIMENTAL=true npx docusaurus build",
+        "build:local": "npm run docs:api && npx docusaurus build",
+        "clear": "npx docusaurus clear",
+        "deploy": "npx docusaurus deploy",
+        "docs:api": "npx typedoc --options typedoc.config.json",
+        "docusaurus": "npx docusaurus",
+        "serve": "npx docusaurus serve",
+        "start": "npm run docs:api && npx docusaurus start --host localhost",
+        "start:devtools": "npm run docs:api && npx cross-env DOCUSAURUS_BASE_URL=/ npx docusaurus start --host localhost",
         "type:css": "npx typed-css-modules .\\src",
-        "typecheck": "tsc --project tsconfig.json --noEmit",
-        "write-heading-ids": "docusaurus write-heading-ids",
-        "write-translations": "docusaurus write-translations"
+        "typecheck": "npx tsc --project tsconfig.json --noEmit",
+        "write-heading-ids": "npx docusaurus write-heading-ids",
+        "write-translations": "npx docusaurus write-translations"
     },
     "dependencies": {
         "@docusaurus/core": "^3.10.2",
@@ -80,7 +80,7 @@
         "react": "^19.2.4",
         "react-dom": "^19.2.4"
     },
-    "packageManager": "npm@11.18.0",
+    "packageManager": "npm@12.0.1",
     "engines": {
         "node": ">=22.0.0"
     },
