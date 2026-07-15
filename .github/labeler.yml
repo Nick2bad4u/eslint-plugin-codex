@@ -80,7 +80,7 @@ configuration:
                 - ".eslint*"
                 - ".prettier*"
                 - ".github/labeler.yml"
-                - "ActionLintConfig.yaml"
+                - "actionlint.yaml"
                 - "cliff.toml"
                 - "knip.config.ts"
                 - "stryker.config.mjs"

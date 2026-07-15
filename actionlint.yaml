@@ -1,5 +1,5 @@
 # Repository-specific actionlint configuration.
-# yaml-language-server: $schema=https://www.schemastore.org/any.json
+# yaml-language-server: $schema=https://www.schemastore.org/actionlint.json
 
 config-variables: []
 paths: {}

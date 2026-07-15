@@ -7,7 +7,7 @@
  *
  * - Disable shellcheck/pyflakes integrations unless explicitly provided.
  * - Enable color output unless -no-color is provided.
- * - Use config/linting/ActionLintConfig.yaml unless -config-file is provided.
+ * - Use actionlint.yaml unless -config-file is provided.
  */
 
 import { readdirSync } from "node:fs";
@@ -64,7 +64,7 @@ const useDefaultFiles =
     fileArgs.length === 0 && !hasAnyFlag(["-version", "-init-config"]);
 
 if (!hasFlag("-config-file")) {
-    userArgs.push("-config-file", path.join(repoRoot, "ActionLintConfig.yaml"));
+    userArgs.push("-config-file", path.join(repoRoot, "actionlint.yaml"));
 }
 
 if (!hasAnyFlag(["-color", "-no-color"])) {
