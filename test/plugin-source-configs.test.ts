@@ -79,7 +79,7 @@ describe("source plugin config wiring", () => {
             expect(tomlLayer?.files).toContain("**/.codex/agents/*.toml");
             expect(tomlLayer?.languageOptions?.["parser"]).toBeDefined();
             expect(jsonLayer?.language).toBe("json/json");
-            expect(jsonLayer?.files).toContain("**/.codex/hooks.json");
+            expect(jsonLayer?.files).toStrictEqual(["**/.codex/hooks.json"]);
             expect(jsonLayer?.plugins).toHaveProperty("json");
         }
     );
@@ -177,5 +177,19 @@ describe("source plugin config wiring", () => {
         });
 
         expect(result?.messages).toHaveLength(0);
+    });
+
+    it("does not apply Codex hook rules to GitHub Copilot hook files", async () => {
+        expect.hasAssertions();
+
+        const eslint = new ESLint({
+            overrideConfig: plugin.configs.recommended,
+            overrideConfigFile: true,
+        });
+        const config = await eslint.calculateConfigForFile(
+            ".github/hooks/hooks.json"
+        );
+
+        expect(config).toBeUndefined();
     });
 });

@@ -39,10 +39,7 @@ const CODEX_TOML_FILES = [
 ] as const;
 
 /** JSON hook files linted by Codex presets. */
-const CODEX_JSON_FILES = [
-    "**/.codex/hooks.json",
-    "**/hooks/hooks.json",
-] as const;
+const CODEX_JSON_FILES = ["**/.codex/hooks.json"] as const;
 
 /** Flat-config preset layers produced by this plugin. */
 export type CodexPresetConfig = CodexPresetLayer[];
