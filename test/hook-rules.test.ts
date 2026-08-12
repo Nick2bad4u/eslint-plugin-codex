@@ -119,4 +119,16 @@ describe("hook rules", () => {
             ).resolves.toHaveLength(0);
         }
     });
+
+    it("ignores GitHub Copilot hook files", async () => {
+        expect.hasAssertions();
+
+        await expect(
+            messageIdsFor(
+                "require-valid-hook-events",
+                ".github/hooks/hooks.json",
+                '{"hooks":{"sessionStart":[]}}'
+            )
+        ).resolves.toHaveLength(0);
+    });
 });

@@ -1,5 +1,6 @@
 import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
+import Heading from "@theme/Heading";
 import Layout from "@theme/Layout";
 import clsx from "clsx";
 
@@ -42,11 +43,10 @@ export default function ResourcesPage(): React.JSX.Element {
                     <div className="container site-hero__grid">
                         <div className="site-hero__copy">
                             <p className="site-kicker">Resources</p>
-                            {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                            <h1 className="site-hero__title">
+                            <Heading as="h1" className="site-hero__title">
                                 Contributor and integrator references without
                                 the scavenger hunt.
-                            </h1>
+                            </Heading>
                             <p className="site-page-intro">
                                 Use this page when you need the fastest path to
                                 rule docs, preset guidance, repository
@@ -70,11 +70,10 @@ export default function ResourcesPage(): React.JSX.Element {
                         </div>
                         <aside className="site-hero__panel">
                             <p className="site-panel__label">Who this is for</p>
-                            {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                            <h2 className="site-panel__title">
+                            <Heading as="h2" className="site-panel__title">
                                 Better entry points for maintainers and advanced
                                 adopters
-                            </h2>
+                            </Heading>
                             <ul className="site-checklist">
                                 <li>
                                     <strong>Integrators</strong>
@@ -115,10 +114,12 @@ export default function ResourcesPage(): React.JSX.Element {
                                 <p className="site-section__eyebrow">
                                     Resources
                                 </p>
-                                {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                                <h2 className="site-section__title">
+                                <Heading
+                                    as="h2"
+                                    className="site-section__title"
+                                >
                                     {group.title}
-                                </h2>
+                                </Heading>
                             </div>
                         </div>
                         <div className="site-grid site-grid--3">
@@ -133,10 +134,12 @@ export default function ResourcesPage(): React.JSX.Element {
                                     >
                                         {item.icon}
                                     </span>
-                                    {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                                    <h3 className="site-link-tile__title">
+                                    <Heading
+                                        as="h3"
+                                        className="site-link-tile__title"
+                                    >
                                         {item.title}
-                                    </h3>
+                                    </Heading>
                                     <p className="site-link-tile__description">
                                         {item.description}
                                     </p>
@@ -160,10 +163,9 @@ export default function ResourcesPage(): React.JSX.Element {
                     <div className="site-section__header">
                         <div>
                             <p className="site-section__eyebrow">Related</p>
-                            {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                            <h2 className="site-section__title">
+                            <Heading as="h2" className="site-section__title">
                                 Keep the pages connected
-                            </h2>
+                            </Heading>
                         </div>
                     </div>
                     <div className="site-grid site-grid--3">
@@ -172,10 +174,12 @@ export default function ResourcesPage(): React.JSX.Element {
                                 className="site-link-tile"
                                 key={page.title}
                             >
-                                {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                                <h3 className="site-link-tile__title">
+                                <Heading
+                                    as="h3"
+                                    className="site-link-tile__title"
+                                >
                                     {page.title}
-                                </h3>
+                                </Heading>
                                 <p className="site-link-tile__description">
                                     {page.description}
                                 </p>

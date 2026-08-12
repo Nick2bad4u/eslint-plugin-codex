@@ -55,8 +55,7 @@ export const isLegacyPromptFilePath = (filePath: string): boolean => {
 
 /** Check whether a path points to a Codex hooks.json layer. */
 export const isHooksJsonFilePath = (filePath: string): boolean =>
-    normalizeFilePath(filePath).endsWith("/.codex/hooks.json") ||
-    normalizeFilePath(filePath).endsWith("/hooks/hooks.json");
+    normalizeFilePath(filePath).endsWith("/.codex/hooks.json");
 
 /** Check whether a path points to a project Codex config layer. */
 export const isProjectConfigFilePath = (filePath: string): boolean =>
