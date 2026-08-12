@@ -3,7 +3,9 @@ import process from "node:process";
 import { ESLint } from "eslint";
 import pc from "picocolors";
 
-import plugin from "../plugin.mjs";
+const pluginSpecifier =
+    process.env["CODEX_COMPAT_PLUGIN_SPECIFIER"] ?? "../plugin.mjs";
+const { default: plugin } = await import(pluginSpecifier);
 
 /**
  * @typedef {Readonly<{

@@ -191,7 +191,7 @@
         "types:update": "npx typesync",
         "update-actions": "npx actions-up --yes --style sha",
         "update-all": "npm run update-deps && npm run update-actions",
-        "update-deps": "npx ncu --configFileName .ncurc.workspaces.json --configFilePath node_modules/ncu-config-nick2bad4u && npm update --workspaces --force && npm install --force && npm run sync:peer-eslint-range && npm run sync:node-version-files && npm run sync:rules:write",
+        "update-deps": "npx ncu --configFileName .ncurc.workspaces.json --configFilePath node_modules/ncu-config-nick2bad4u && npm update --workspaces && npm install && npm run sync:peer-eslint-range && npm run sync:node-version-files && npm run sync:rules:write",
         "verify:readme-rules-table": "npm run build && npm run sync:readme-rules-table"
     },
     "overrides": {
@@ -261,7 +261,7 @@
         "@eslint/markdown": "^8.0.0",
         "eslint": "^9.15.0 || ^10.0.0"
     },
-    "packageManager": "npm@12.0.1",
+    "packageManager": "npm@12.0.2",
     "engines": {
         "node": ">=22.0.0"
     },
@@ -273,7 +273,7 @@
         },
         "packageManager": {
             "name": "npm",
-            "version": ">=11.0.0",
+            "version": "12.0.2",
             "onFail": "error"
         }
     },
