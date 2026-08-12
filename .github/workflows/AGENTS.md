@@ -6,5 +6,5 @@
 - CI must build, typecheck, run real tests with enforced coverage, check generated documentation, and retain ESLint 9 compatibility.
 - Set bounded timeouts and concurrency for CI, docs deployment, scheduled workflows, and releases.
 - The release workflow must use npm trusted publishing (`id-token: write`) and provenance. Do not add `NPM_TOKEN` or another long-lived registry secret.
-- Publish the exact tarball that passed `release:check`. Do not push a version commit or tag before npm accepts the package; push the matching commit and tag atomically afterward.
+- Publish the exact tarball that passed `release:check`. Do not push a version commit or tag before npm accepts the package; try to push the matching commit and tag atomically afterward. If `main` advances after publication, preserve the immutable tagged release commit and replay only its patch onto current `main` with an identity check.
 - Use `main` as the only default branch. Run `npm run lint:actions`, `npm run lint:yaml`, and `npm run lint:yamllint` after workflow edits.
