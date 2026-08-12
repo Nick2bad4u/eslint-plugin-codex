@@ -74,7 +74,7 @@ const knipConfig: KnipConfig = {
         },
         "docs/docusaurus": {
             entry: ["sidebars.*.ts", "src/pages/**/*.{ts,tsx}"],
-            project: ["src/**/*.{ts,tsx}", "*.ts"],
+            project: ["src/**/*.{mdx,ts,tsx}", "*.ts"],
         },
     },
 };

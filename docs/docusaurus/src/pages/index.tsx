@@ -1,6 +1,7 @@
 import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
+import Heading from "@theme/Heading";
 import Layout from "@theme/Layout";
 
 import {
@@ -41,10 +42,9 @@ export default function Home(): React.JSX.Element {
                                     Codex repository linting
                                 </p>
                             </div>
-                            {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                            <h1 className="home-hero__title">
+                            <Heading as="h1" className="home-hero__title">
                                 @typpi/eslint-plugin-codex
-                            </h1>
+                            </Heading>
                             <p className="home-hero__subtitle">
                                 Objective ESLint checks for Codex instructions,
                                 skills, agents, configuration, MCP servers, and
@@ -109,10 +109,9 @@ export default function Home(): React.JSX.Element {
                                 <span aria-hidden className="home-card__icon">
                                     {getHomeIcon(card.icon)}
                                 </span>
-                                {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                                <h2 className="home-card__title">
+                                <Heading as="h2" className="home-card__title">
                                     {card.title}
-                                </h2>
+                                </Heading>
                             </div>
                             <p className="home-card__description">
                                 {card.description}

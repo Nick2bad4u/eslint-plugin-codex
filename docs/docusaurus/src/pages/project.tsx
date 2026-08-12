@@ -1,5 +1,6 @@
 import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
+import Heading from "@theme/Heading";
 import Layout from "@theme/Layout";
 import clsx from "clsx";
 
@@ -47,11 +48,10 @@ export default function ProjectPage(): React.JSX.Element {
                     <div className="container site-hero__grid">
                         <div className="site-hero__copy">
                             <p className="site-kicker">Project</p>
-                            {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                            <h1 className="site-hero__title">
+                            <Heading as="h1" className="site-hero__title">
                                 Live package, release, and repository signals in
                                 one place.
-                            </h1>
+                            </Heading>
                             <p className="site-page-intro">
                                 This page collects the public project surfaces
                                 that matter when evaluating, adopting, or
@@ -92,11 +92,10 @@ export default function ProjectPage(): React.JSX.Element {
                             <p className="site-panel__label">
                                 What this surfaces
                             </p>
-                            {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                            <h2 className="site-panel__title">
+                            <Heading as="h2" className="site-panel__title">
                                 Repository trust signals for adopters and
                                 maintainers
-                            </h2>
+                            </Heading>
                             <ul className="site-checklist">
                                 {projectSignals.map((signal) => (
                                     <li key={signal.title}>
@@ -113,11 +112,10 @@ export default function ProjectPage(): React.JSX.Element {
                     <div className="site-section__header">
                         <div>
                             <p className="site-section__eyebrow">Signals</p>
-                            {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                            <h2 className="site-section__title">
+                            <Heading as="h2" className="site-section__title">
                                 Open the surfaces that answer real evaluation
                                 questions
-                            </h2>
+                            </Heading>
                         </div>
                         <p className="site-inline-note">
                             When a user asks whether the project is active,
@@ -137,10 +135,12 @@ export default function ProjectPage(): React.JSX.Element {
                                 >
                                     {highlight.icon}
                                 </span>
-                                {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                                <h3 className="site-link-tile__title">
+                                <Heading
+                                    as="h3"
+                                    className="site-link-tile__title"
+                                >
                                     {highlight.title}
-                                </h3>
+                                </Heading>
                                 <p className="site-link-tile__description">
                                     {highlight.description}
                                 </p>
@@ -163,10 +163,9 @@ export default function ProjectPage(): React.JSX.Element {
                     <div className="site-section__header">
                         <div>
                             <p className="site-section__eyebrow">Next</p>
-                            {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                            <h2 className="site-section__title">
+                            <Heading as="h2" className="site-section__title">
                                 Keep moving through the docs surfaces
-                            </h2>
+                            </Heading>
                         </div>
                     </div>
                     <div className="site-grid site-grid--3">
@@ -175,10 +174,12 @@ export default function ProjectPage(): React.JSX.Element {
                                 className="site-link-tile"
                                 key={page.title}
                             >
-                                {/* eslint-disable-next-line @docusaurus/prefer-docusaurus-heading -- The docs workspace does not expose @theme/Heading types to TypeScript in this repo setup. */}
-                                <h3 className="site-link-tile__title">
+                                <Heading
+                                    as="h3"
+                                    className="site-link-tile__title"
+                                >
                                     {page.title}
-                                </h3>
+                                </Heading>
                                 <p className="site-link-tile__description">
                                     {page.description}
                                 </p>

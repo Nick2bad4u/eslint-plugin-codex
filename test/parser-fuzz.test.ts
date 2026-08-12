@@ -53,13 +53,17 @@ describe("parser fuzz properties", () => {
                     const document = extractFrontmatter(text);
 
                     expect(document).not.toBeNull();
-                    expect(document?.offset).toBeGreaterThan(0);
-                    expect(document?.offset).toBeLessThanOrEqual(text.length);
-                    expect(document?.body).toBe(text.slice(document?.offset));
-                    expect(document?.offset ?? 0).toBe(
-                        text.length - (document?.body.length ?? 0)
+                    if (document === null) {
+                        return;
+                    }
+
+                    expect(document.offset).toBeGreaterThan(0);
+                    expect(document.offset).toBeLessThanOrEqual(text.length);
+                    expect(document.body).toBe(text.slice(document.offset));
+                    expect(document.offset).toBe(
+                        text.length - document.body.length
                     );
-                    expect(document?.error).toSatisfy(
+                    expect(document.error).toSatisfy(
                         (error: unknown) =>
                             error === undefined || typeof error === "string"
                     );
