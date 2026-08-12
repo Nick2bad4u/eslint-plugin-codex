@@ -12,3 +12,13 @@
     id          = "GHSA-w5hq-g745-h8pq"
     ignoreUntil = 2026-10-14
     reason      = "Transitive sockjs dependency used only by the local Docusaurus development server. The project does not call the affected uuid buffer APIs, and uuid is absent from the published plugin."
+
+[[IgnoredVulns]]
+    id          = "GHSA-5p2g-fcmc-qvqq"
+    ignoreUntil = 2026-11-12
+    reason      = "Unpatched image-size parser DoS is reachable only through unshipped Docusaurus build tooling over repository-controlled images; the published package excludes Docusaurus and its fresh production consumer audit is clean. Remove when upstream patches image-size or docs accept untrusted images."
+
+[[IgnoredVulns]]
+    id          = "GHSA-w3rx-r6r6-pgpr"
+    ignoreUntil = 2026-11-12
+    reason      = "Unpatched image-size parser DoS is reachable only through unshipped Docusaurus build tooling over repository-controlled images; the published package excludes Docusaurus and its fresh production consumer audit is clean. Remove when upstream patches image-size or docs accept untrusted images."
