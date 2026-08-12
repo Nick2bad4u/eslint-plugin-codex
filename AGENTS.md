@@ -17,7 +17,7 @@ The public package supports Node.js 22+, ESLint 9.15+/10 flat config, ESM, and C
 
 ## Commands
 
-Install with `npm ci --force`. The force flag is currently required because `madge@8` has an optional TypeScript peer that does not yet include this repository's TypeScript 6 toolchain.
+Install with npm 12.0.2 and run `npm ci`.
 
 Use focused checks while editing:
 

@@ -4,15 +4,13 @@ Thanks for helping improve the plugin. It enforces objective Codex configuration
 
 ## Setup
 
-Requirements are Node.js 22+, npm 11+, and Git.
+Requirements are Node.js 22+, npm 12.0.2, and Git.
 
 ```sh
-npm ci --force
+npm ci
 npm run build
 npm test
 ```
-
-`--force` is currently required because `madge@8` has an optional TypeScript peer range that does not include the repository's TypeScript 6 toolchain.
 
 ## Rule changes
 

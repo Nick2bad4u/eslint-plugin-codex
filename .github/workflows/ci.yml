@@ -56,11 +56,13 @@ jobs:
               uses: "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020" # v7.0.0
               with:
                   node-version-file: ".node-version"
-                  cache: "npm"
-                  cache-dependency-path: "package-lock.json"
+                  package-manager-cache: false
+
+            - name: "Install npm 12"
+              run: "npm install --global npm@12.0.2"
 
             - name: "Install dependencies"
-              run: "npm ci --force"
+              run: "npm ci"
 
             - name: "Build package"
               run: "npm run build"
@@ -171,18 +173,29 @@ jobs:
             - name: "Setup Node.js"
               uses: "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020" # v7.0.0
               with:
-                  cache: "npm"
-                  cache-dependency-path: "package-lock.json"
                   node-version-file: ".node-version"
+                  package-manager-cache: false
+
+            - name: "Install npm 12"
+              run: "npm install --global npm@12.0.2"
 
             - name: "Install dependencies"
-              run: "npm ci --force"
+              run: "npm ci"
 
             - name: "Build package"
               run: "npm run build"
 
-            - name: "Install ESLint 9 runtime for compatibility smoke checks"
-              run: "npm install --no-save --force eslint@${{ matrix.eslint-version }} @eslint/js@${{ matrix.eslint-js-version }}"
-
-            - name: "Run ESLint 9 compatibility smoke checks"
-              run: "npm run lint:compat:eslint9 -- --expect-eslint-major=9"
+            - name: "Run isolated ESLint 9 compatibility smoke checks"
+              env:
+                  ESLINT_JS_VERSION: "${{ matrix.eslint-js-version }}"
+                  ESLINT_VERSION: "${{ matrix.eslint-version }}"
+              run: |
+                  set -euo pipefail
+                  compat_root="${RUNNER_TEMP}/eslint-compat-${{ matrix.label }}"
+                  mkdir -p "$compat_root"
+                  tarball_name=$(npm pack --pack-destination "$compat_root" --json | node scripts/read-npm-pack-filename.mjs)
+                  cp scripts/eslint9-compat-smoke.mjs "$compat_root/"
+                  cd "$compat_root"
+                  npm init --yes
+                  npm install --ignore-scripts "./${tarball_name}" "eslint@${ESLINT_VERSION}" "@eslint/js@${ESLINT_JS_VERSION}" picocolors@1.1.1
+                  CODEX_COMPAT_PLUGIN_SPECIFIER="@typpi/eslint-plugin-codex" node eslint9-compat-smoke.mjs --expect-eslint-major=9

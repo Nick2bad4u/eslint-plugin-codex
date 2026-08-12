@@ -65,6 +65,9 @@ jobs:
                   registry-url: "${{ env.NPM_REGISTRY_URL }}"
                   package-manager-cache: false
 
+            - name: "Install npm 12"
+              run: "npm install --global npm@12.0.2"
+
             - name: "Setup Go for native scanners"
               uses: "actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e" # v7.0.0
               with:
@@ -72,7 +75,7 @@ jobs:
                   go-version: "stable"
 
             - name: "Install dependencies"
-              run: "npm ci --force"
+              run: "npm ci"
 
             - name: "Install release verification tools"
               run: |
@@ -137,16 +140,10 @@ jobs:
               run: |
                   set -euo pipefail
                   mkdir -p temp/package
-                  tarball=$(npm pack --pack-destination temp/package --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>process.stdout.write(JSON.parse(s)[0].filename))")
+                  tarball=$(npm pack --pack-destination temp/package --json | node scripts/read-npm-pack-filename.mjs)
                   tarball="temp/package/${tarball}"
                   test -s "$tarball"
                   echo "tarball=$tarball" >> "$GITHUB_OUTPUT"
-
-            - name: "Confirm main has not moved"
-              run: |
-                  set -euo pipefail
-                  git fetch origin main
-                  test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
 
             - name: "Create release commit and tag"
               env:
@@ -158,13 +155,6 @@ jobs:
                   git add package.json package-lock.json
                   git commit -m "chore: release ${TAG}"
                   git tag -a "$TAG" -m "$TAG"
-
-            - name: "Push release commit and tag atomically"
-              env:
-                  TAG: "${{ steps.version.outputs.tag }}"
-              run: |
-                  set -euo pipefail
-                  git push --atomic origin HEAD:main "$TAG"
 
             - name: "Generate release notes"
               env:
@@ -224,8 +214,38 @@ jobs:
                     exit 1
                   fi
 
+            - name: "Confirm main has not moved"
+              run: |
+                  set -euo pipefail
+                  git fetch origin main
+                  test "$(git rev-parse HEAD^)" = "$(git rev-parse origin/main)"
+
             - name: "Publish to npm with trusted publishing"
               run: "npm publish '${{ steps.pack.outputs.tarball }}' --access public --provenance"
+
+            - name: "Push release commit and tag"
+              id: "release_refs"
+              env:
+                  TAG: "${{ steps.version.outputs.tag }}"
+              run: |
+                  set -euo pipefail
+                  release_commit=$(git rev-parse HEAD)
+
+                  if git push --atomic origin HEAD:main "$TAG"; then
+                    echo "main_reconciliation_required=false" >> "$GITHUB_OUTPUT"
+                    exit 0
+                  fi
+
+                  echo "main advanced after npm accepted the package; preserving the verified release commit under ${TAG}."
+                  git push origin "$TAG"
+
+                  remote_tag_commit=$(git ls-remote origin "refs/tags/${TAG}^{}" | cut -f1)
+                  if [ "$remote_tag_commit" != "$release_commit" ]; then
+                    echo "::error::Remote ${TAG} points to ${remote_tag_commit:-'(missing)'}, not ${release_commit}."
+                    exit 1
+                  fi
+
+                  echo "main_reconciliation_required=true" >> "$GITHUB_OUTPUT"
 
             - name: "Create GitHub release"
               uses: "softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228" # v3.0.2
@@ -236,6 +256,56 @@ jobs:
                   name: "${{ steps.version.outputs.tag }}"
                   prerelease: false
                   tag_name: "${{ steps.version.outputs.tag }}"
+
+            - name: "Reconcile the release commit onto advanced main"
+              if: "${{ steps.release_refs.outputs.main_reconciliation_required == 'true' }}"
+              env:
+                  TAG: "${{ steps.version.outputs.tag }}"
+              run: |
+                  set -euo pipefail
+                  release_commit=$(git rev-parse "${TAG}^{commit}")
+                  release_parent=$(git rev-parse "${release_commit}^")
+                  release_patch_id=$(git diff "$release_parent" "$release_commit" | git patch-id --stable | cut -d' ' -f1)
+                  previous_candidate=""
+
+                  for attempt in 1 2 3 4 5 6; do
+                    git fetch origin main
+
+                    if [ -n "$previous_candidate" ] \
+                      && git merge-base --is-ancestor "$previous_candidate" origin/main; then
+                      echo "The reconciled release commit is already present on main."
+                      exit 0
+                    fi
+
+                    git checkout --detach "$release_commit"
+                    if ! git rebase --onto origin/main "$release_parent" "$release_commit"; then
+                      git rebase --abort || true
+                      echo "::error::Could not replay the ${TAG} version patch onto the advanced main branch."
+                      exit 1
+                    fi
+
+                    candidate=$(git rev-parse HEAD)
+                    candidate_parent=$(git rev-parse "${candidate}^")
+                    candidate_patch_id=$(git diff "$candidate_parent" "$candidate" | git patch-id --stable | cut -d' ' -f1)
+                    if [ "$candidate_patch_id" != "$release_patch_id" ]; then
+                      echo "::error::Rebased release patch ${candidate_patch_id} does not match tagged patch ${release_patch_id}."
+                      exit 1
+                    fi
+
+                    if git push origin "${candidate}:main"; then
+                      echo "Replayed the verified ${TAG} version patch onto main at ${candidate}."
+                      exit 0
+                    fi
+
+                    previous_candidate="$candidate"
+                    if [ "$attempt" -lt 6 ]; then
+                      echo "main advanced again; retrying release reconciliation (${attempt}/6)."
+                      sleep "$((attempt * 2))"
+                    fi
+                  done
+
+                  echo "::error::main continued advancing during all release reconciliation attempts."
+                  exit 1
 
             - name: "Release summary"
               if: "${{ !cancelled() }}"
