@@ -9,3 +9,5 @@ export type GitCliffArgumentsContext = {
 export function buildGitCliffArguments(
     context: GitCliffArgumentsContext
 ): string[];
+
+export function resolvePackageVersionTag(packageJsonContent: string): string;

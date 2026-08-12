@@ -12,6 +12,7 @@ import { runGitCliff } from "git-cliff";
 const cliffConfigPath = "node_modules/gitcliff-config-nick2bad4u/cliff.toml";
 const githubRepository = "Nick2bad4u/eslint-plugin-codex";
 const releaseTagPattern = /^v\d+\.\d+\.\d+(?:-[\dA-Za-z.\x2D]+)?$/v;
+const packageVersionPattern = /^\d+\.\d+\.\d+(?:-[\dA-Za-z.\x2D]+)?$/v;
 
 /**
  * Run Git and return trimmed standard output.
@@ -103,6 +104,32 @@ export const buildGitCliffArguments = ({
 };
 
 /**
+ * Resolve the release tag corresponding to a committed package manifest.
+ *
+ * @param {string} packageJsonContent
+ *
+ * @returns {string}
+ */
+export const resolvePackageVersionTag = (packageJsonContent) => {
+    /** @type {unknown} */
+    const packageJson = JSON.parse(packageJsonContent);
+
+    if (
+        typeof packageJson !== "object" ||
+        packageJson === null ||
+        !("version" in packageJson) ||
+        typeof packageJson.version !== "string" ||
+        !packageVersionPattern.test(packageJson.version)
+    ) {
+        throw new TypeError(
+            "The release parent package.json must contain an exact version."
+        );
+    }
+
+    return `v${packageJson.version}`;
+};
+
+/**
  * Generate release notes for the current repository state.
  *
  * @param {readonly string[]} additionalArguments
@@ -135,14 +162,17 @@ const generateReleaseNotes = async (additionalArguments) => {
     const previousTag =
         headParent === null
             ? null
-            : await runGit([
-                  "describe",
-                  "--tags",
-                  "--match",
-                  "v[0-9]*",
-                  "--abbrev=0",
-                  headParent,
-              ]);
+            : resolvePackageVersionTag(
+                  await runGit(["show", `${headParent}:package.json`])
+              );
+
+    if (previousTag !== null) {
+        await runGit([
+            "rev-parse",
+            "--verify",
+            `refs/tags/${previousTag}^{commit}`,
+        ]);
+    }
     const cliffArguments = buildGitCliffArguments({
         additionalArguments,
         headParent,

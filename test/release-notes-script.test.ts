@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { buildGitCliffArguments } from "../scripts/generate-release-notes.mjs";
+import {
+    buildGitCliffArguments,
+    resolvePackageVersionTag,
+} from "../scripts/generate-release-notes.mjs";
 
 const baseArguments = [
     "--config",
@@ -63,5 +66,21 @@ describe(buildGitCliffArguments, () => {
                 previousTag: null,
             })
         ).toThrow("Cannot derive the previous release range for v1.0.2.");
+    });
+});
+
+describe(resolvePackageVersionTag, () => {
+    it("uses the parent manifest version without requiring tag ancestry", () => {
+        expect.assertions(1);
+
+        expect(resolvePackageVersionTag('{"version":"1.0.1"}')).toBe("v1.0.1");
+    });
+
+    it("rejects a parent manifest without an exact version", () => {
+        expect.assertions(1);
+
+        expect(() => resolvePackageVersionTag('{"version":"latest"}')).toThrow(
+            "The release parent package.json must contain an exact version."
+        );
     });
 });
