@@ -24,7 +24,6 @@ const knipConfig: KnipConfig = {
         "@easyops-cn/docusaurus-search-local",
         "@easyops-cn/docusaurus-theme-docusaurus-search-local",
         "@stryker-ignorer/console-all",
-        "git-cliff",
         "gitcliff-config-nick2bad4u",
         "gitleaks-config-nick2bad4u",
         "lychee-config-nick2bad4u",
