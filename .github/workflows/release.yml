@@ -140,7 +140,7 @@ jobs:
               run: |
                   set -euo pipefail
                   mkdir -p temp/package
-                  tarball=$(npm pack --pack-destination temp/package --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>process.stdout.write(JSON.parse(s)[0].filename))")
+                  tarball=$(npm pack --pack-destination temp/package --json | node scripts/read-npm-pack-filename.mjs)
                   tarball="temp/package/${tarball}"
                   test -s "$tarball"
                   echo "tarball=$tarball" >> "$GITHUB_OUTPUT"

@@ -193,7 +193,7 @@ jobs:
                   set -euo pipefail
                   compat_root="${RUNNER_TEMP}/eslint-compat-${{ matrix.label }}"
                   mkdir -p "$compat_root"
-                  tarball_name=$(npm pack --pack-destination "$compat_root" --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>process.stdout.write(JSON.parse(s)[0].filename))")
+                  tarball_name=$(npm pack --pack-destination "$compat_root" --json | node scripts/read-npm-pack-filename.mjs)
                   cp scripts/eslint9-compat-smoke.mjs "$compat_root/"
                   cd "$compat_root"
                   npm init --yes
