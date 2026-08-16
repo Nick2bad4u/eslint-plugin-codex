@@ -29,6 +29,11 @@ describe("mcp configuration rules", () => {
             "invalidApprovalMode",
         ],
         [
+            "require-valid-mcp-approval-mode",
+            "[mcp_servers.docs]\ncommand = 'server'\n[mcp_servers.docs.tools.write]\napproval_mode = 'always'\n",
+            "invalidApprovalMode",
+        ],
+        [
             "require-valid-mcp-transport",
             "[mcp_servers.docs]\nenabled = true\n",
             "missingTransport",
@@ -37,6 +42,11 @@ describe("mcp configuration rules", () => {
             "require-valid-mcp-transport",
             "[mcp_servers.docs]\nurl = 'ftp://example.com'\n",
             "invalidHttpUrl",
+        ],
+        [
+            "require-valid-mcp-transport",
+            "mcp_servers = { docs = 'server' }\n",
+            "invalidServerTable",
         ],
     ])(
         "%s reports invalid MCP configuration",
