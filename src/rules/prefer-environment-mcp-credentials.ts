@@ -14,10 +14,27 @@ import {
     getTomlObject,
     isTomlObject,
     reportTomlDocumentProblem,
+    type TomlObject,
 } from "../_internal/toml-rule.js";
 
 const SENSITIVE_HEADER_PATTERN =
     /^(?:authorization|proxy-authorization|x-api-key)$/iv;
+
+const getSensitiveLiteralHeaderNames = (
+    server: TomlObject
+): readonly string[] => {
+    const headers = getTomlObject(server, "http_headers");
+
+    return isDefined(headers)
+        ? objectEntries(headers)
+              .filter(
+                  ([headerName, headerValue]) =>
+                      typeof headerValue === "string" &&
+                      SENSITIVE_HEADER_PATTERN.test(headerName)
+              )
+              .map(([headerName]) => headerName)
+        : [];
+};
 
 /** Prefer environment-backed HTTP credentials over committed literals. */
 const preferEnvironmentMcpCredentialsRule: CodexRuleModule = createCodexRule({
@@ -38,22 +55,9 @@ const preferEnvironmentMcpCredentialsRule: CodexRuleModule = createCodexRule({
                     continue;
                 }
 
-                const headers = getTomlObject(rawServer, "http_headers");
-
-                if (!isDefined(headers)) {
-                    continue;
-                }
-
-                for (const [headerName, headerValue] of objectEntries(
-                    headers
+                for (const headerName of getSensitiveLiteralHeaderNames(
+                    rawServer
                 )) {
-                    if (
-                        typeof headerValue !== "string" ||
-                        !SENSITIVE_HEADER_PATTERN.test(headerName)
-                    ) {
-                        continue;
-                    }
-
                     reportTomlDocumentProblem(context, {
                         data: {
                             headerName,
@@ -75,6 +79,7 @@ const preferEnvironmentMcpCredentialsRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("prefer-environment-mcp-credentials"),
         },
+        languages: ["js/js"],
         messages: {
             literalCredentialHeader:
                 "MCP server `{{serverName}}` stores sensitive header `{{headerName}}` as a literal. Use bearer_token_env_var or env_http_headers so credentials stay outside config.",

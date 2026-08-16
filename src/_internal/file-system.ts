@@ -107,21 +107,17 @@ const collectDirectoryFiles = (
 
     for (const entry of directoryEntries) {
         const absoluteEntryPath = path.join(currentDirectory, entry.name);
+        const shouldCollectFile =
+            entry.isFile() &&
+            (!isDefined(predicate) || predicate(absoluteEntryPath));
 
         if (entry.isDirectory()) {
             pendingDirectories.push(absoluteEntryPath);
-            continue;
         }
 
-        if (!entry.isFile()) {
-            continue;
+        if (shouldCollectFile) {
+            discoveredFiles.push(absoluteEntryPath);
         }
-
-        if (isDefined(predicate) && !predicate(absoluteEntryPath)) {
-            continue;
-        }
-
-        discoveredFiles.push(absoluteEntryPath);
     }
 
     return {

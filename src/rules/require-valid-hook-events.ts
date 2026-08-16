@@ -47,6 +47,7 @@ const requireValidHookEventsRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-hook-events"),
         },
+        languages: ["js/js", "json/json"],
         messages: {
             invalidHookEvent:
                 "Codex does not recognize hook event `{{eventName}}`.",

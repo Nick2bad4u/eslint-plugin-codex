@@ -61,17 +61,15 @@ const noConflictingMcpToolListsRule: CodexRuleModule = createCodexRule({
                     .filter((tool) => setHas(disabledTools, tool))
                     .toSorted((left, right) => left.localeCompare(right));
 
-                if (isEmpty(conflicts)) {
-                    continue;
+                if (!isEmpty(conflicts)) {
+                    reportTomlDocumentProblem(context, {
+                        data: {
+                            serverName,
+                            tools: arrayJoin(conflicts, ", "),
+                        },
+                        messageId: "conflictingToolLists",
+                    });
                 }
-
-                reportTomlDocumentProblem(context, {
-                    data: {
-                        serverName,
-                        tools: arrayJoin(conflicts, ", "),
-                    },
-                    messageId: "conflictingToolLists",
-                });
             }
         }),
     meta: {
@@ -85,6 +83,7 @@ const noConflictingMcpToolListsRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-conflicting-mcp-tool-lists"),
         },
+        languages: ["js/js"],
         messages: {
             conflictingToolLists:
                 "MCP server `{{serverName}}` enables and disables the same tools: {{tools}}. Codex applies the deny list after the allow list.",

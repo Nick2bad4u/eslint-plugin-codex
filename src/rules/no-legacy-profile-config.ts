@@ -49,6 +49,7 @@ const noLegacyProfileConfigRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-legacy-profile-config"),
         },
+        languages: ["js/js"],
         messages: {
             legacyProfileConfig:
                 "The top-level `{{key}}` profile syntax is no longer supported. Move profile overrides to a standalone $CODEX_HOME/<name>.config.toml file.",

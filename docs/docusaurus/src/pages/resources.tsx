@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
 import Heading from "@theme/Heading";
@@ -7,7 +9,7 @@ import clsx from "clsx";
 import { getSiteLinkProps, resourceGroups } from "../components/siteData";
 
 /** Render the contributor-facing resources index for the docs site. */
-export default function ResourcesPage(): React.JSX.Element {
+export default function ResourcesPage(): JSX.Element {
     const relatedPages = [
         {
             description:

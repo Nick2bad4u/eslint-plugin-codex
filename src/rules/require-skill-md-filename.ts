@@ -59,6 +59,7 @@ const requireSkillMdFilenameRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-skill-md-filename"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             invalidSkillDefinitionFilename:
                 "Skill-definition markdown files should be named `SKILL.md`, not `{{basename}}`.",

@@ -21,6 +21,7 @@ import {
 import { codexRules } from "./_internal/rules-registry.js";
 
 const ERROR_SEVERITY = "error" as const;
+const SELF_CONTAINED_REGISTRATION_MODE = "self-contained" as const;
 
 /** Markdown customization files linted by Codex presets. */
 const CODEX_MARKDOWN_FILES = [
@@ -65,7 +66,7 @@ type CodexPluginContract = Except<ESLint.Plugin, "configs" | "rules"> & {
         version: string;
     };
     processors: NonNullable<ESLint.Plugin["processors"]>;
-    rules: NonNullable<ESLint.Plugin["rules"]>;
+    rules: NonNullable<ESLint.Plugin["rules"]> & typeof codexRules;
 };
 
 type LanguagePluginRegistrationMode = "external" | "self-contained";
@@ -190,7 +191,7 @@ const createMarkdownPluginMap = (
     plugin: Readonly<CodexPluginContract>,
     registrationMode: LanguagePluginRegistrationMode
 ): NonNullable<CodexPresetLayer["plugins"]> =>
-    registrationMode === "self-contained"
+    registrationMode === SELF_CONTAINED_REGISTRATION_MODE
         ? {
               codex: plugin,
               markdown: markdownPlugin,
@@ -203,7 +204,7 @@ const createJsonPluginMap = (
     plugin: Readonly<CodexPluginContract>,
     registrationMode: LanguagePluginRegistrationMode
 ): NonNullable<CodexPresetLayer["plugins"]> =>
-    registrationMode === "self-contained"
+    registrationMode === SELF_CONTAINED_REGISTRATION_MODE
         ? {
               codex: plugin,
               json: jsonPlugin,
@@ -219,7 +220,7 @@ const createPresetConfig = (
 ): CodexPresetConfig => {
     const basePresetName = codexConfigMetadataByName[configName].presetName;
     const presetName =
-        registrationMode === "self-contained"
+        registrationMode === SELF_CONTAINED_REGISTRATION_MODE
             ? basePresetName
             : `${basePresetName}-without-language-plugins`;
     const presetRuleNames = presetRuleNamesByConfig[configName];
@@ -283,16 +284,16 @@ const createPreset = (
 ): CodexPresetConfig => createPresetConfig(name, plugin, mode);
 
 plugin.configs = {
-    all: createPreset("all", "self-contained"),
+    all: createPreset("all", SELF_CONTAINED_REGISTRATION_MODE),
     "all-without-language-plugins": createPreset("all", "external"),
-    minimal: createPreset("minimal", "self-contained"),
+    minimal: createPreset("minimal", SELF_CONTAINED_REGISTRATION_MODE),
     "minimal-without-language-plugins": createPreset("minimal", "external"),
-    recommended: createPreset("recommended", "self-contained"),
+    recommended: createPreset("recommended", SELF_CONTAINED_REGISTRATION_MODE),
     "recommended-without-language-plugins": createPreset(
         "recommended",
         "external"
     ),
-    strict: createPreset("strict", "self-contained"),
+    strict: createPreset("strict", SELF_CONTAINED_REGISTRATION_MODE),
     "strict-without-language-plugins": createPreset("strict", "external"),
 };
 

@@ -10,6 +10,8 @@ import { getStaticTOMLValue } from "toml-eslint-parser";
 
 import { isCodexTomlFilePath } from "./codex-file-kind.js";
 
+const programVisitorKey = "Program" as const;
+
 /** TOML array value after static evaluation. */
 export type TomlArray = readonly TomlValue[];
 
@@ -71,7 +73,7 @@ export const createTomlDocumentListener = (
     context: Readonly<TSESLint.RuleContext<string, Readonly<UnknownArray>>>,
     lintDocument: (document: TomlObject) => void
 ): TSESLint.RuleListener => ({
-    Program(node): void {
+    [programVisitorKey]: (node): void => {
         if (!isCodexTomlFilePath(context.filename)) {
             return;
         }

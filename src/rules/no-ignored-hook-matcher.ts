@@ -65,6 +65,7 @@ const noIgnoredHookMatcherRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-ignored-hook-matcher"),
         },
+        languages: ["js/js", "json/json"],
         messages: {
             ignoredMatcher:
                 "Codex ignores matcher on {{eventName}} hooks. Remove it so the configuration does not imply filtering that never occurs.",

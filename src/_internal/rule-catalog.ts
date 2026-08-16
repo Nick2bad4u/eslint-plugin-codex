@@ -78,7 +78,12 @@ const ruleNameSet: ReadonlySet<string> = new Set(orderedRuleNames);
 const isCodexRuleName = (value: string): value is CodexRuleNamePattern =>
     setHas(ruleNameSet, value);
 
-/** Resolve stable catalog metadata for an authored rule name. */
+/**
+ * Resolve stable catalog metadata for an authored rule name.
+ *
+ * @throws A `TypeError` when the rule name is not present in the stable
+ *   catalog.
+ */
 export const getRuleCatalogEntryForRuleName = (
     ruleName: string
 ): CodexRuleCatalogEntry => {

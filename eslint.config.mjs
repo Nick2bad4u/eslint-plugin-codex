@@ -1,4 +1,4 @@
-import nickTwoBadFourU from "eslint-config-nick2bad4u";
+import { createConfig } from "eslint-config-nick2bad4u";
 
 import plugin from "./plugin.mjs";
 
@@ -13,27 +13,14 @@ const config = [
         ],
         name: "Local Tooling Files Outside TypeScript Project Service",
     },
-    // The shared config has not shipped a Codex-specific exclusion yet. Its
-    // `withoutCopilot` preset is the neutral base used by plugin repositories.
-    ...nickTwoBadFourU.configs.withoutCopilot,
-
-    // Local Plugin Config
-    // This lets us use the plugin's rules in this repository without needing to publish the plugin first.
-    {
-        files: ["src/**/*.{js,mjs,cjs,ts,mts,cts,tsx,jsx}"],
-        name: "Local Codex",
+    // Dogfood the local plugin through the shared config's format-specific
+    // Codex layers while leaving GitHub Copilot rules disabled in this repo.
+    ...createConfig({
         plugins: {
             codex: plugin,
+            copilot: false,
         },
-        rules: {
-            // @ts-expect-error -- plugin.mjs is typed as generic ESLint.Plugin.
-            ...plugin.configs.all[0].rules,
-            // @ts-expect-error -- plugin.mjs is typed as generic ESLint.Plugin.
-            ...plugin.configs.all[1].rules,
-            // @ts-expect-error -- plugin.mjs is typed as generic ESLint.Plugin.
-            ...plugin.configs.all[2].rules,
-        },
-    },
+    }),
     {
         files: ["eslint.config.mjs"],
         name: "Config File Type-Safety Guardrails",

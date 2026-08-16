@@ -43,94 +43,105 @@ describe("parser fuzz properties", () => {
     it("preserves frontmatter body offsets for arbitrary YAML and Markdown", () => {
         expect.hasAssertions();
 
-        fc.assert(
-            fc.property(
-                arbitraryText,
-                arbitraryText,
-                fc.constantFrom("\n", "\r\n"),
-                (content, body, endOfLine) => {
-                    const text = `---${endOfLine}${content}${endOfLine}---${endOfLine}${body}`;
-                    const document = extractFrontmatter(text);
+        expect(() => {
+            fc.assert(
+                fc.property(
+                    arbitraryText,
+                    arbitraryText,
+                    fc.constantFrom("\n", "\r\n"),
+                    (content, body, endOfLine) => {
+                        const text = `---${endOfLine}${content}${endOfLine}---${endOfLine}${body}`;
+                        const document = extractFrontmatter(text);
 
-                    expect(document).not.toBeNull();
-                    if (document === null) {
-                        return;
+                        expect(document).not.toBeNull();
+
+                        if (document === null) {
+                            return;
+                        }
+
+                        expect(document.offset).toBeGreaterThan(0);
+                        expect(document.offset).toBeLessThanOrEqual(
+                            text.length
+                        );
+                        expect(document.body).toBe(text.slice(document.offset));
+                        expect(document.offset).toBe(
+                            text.length - document.body.length
+                        );
+                        expect(document.error).toSatisfy(
+                            (error: unknown) =>
+                                error === undefined || typeof error === "string"
+                        );
                     }
-
-                    expect(document.offset).toBeGreaterThan(0);
-                    expect(document.offset).toBeLessThanOrEqual(text.length);
-                    expect(document.body).toBe(text.slice(document.offset));
-                    expect(document.offset).toBe(
-                        text.length - document.body.length
-                    );
-                    expect(document.error).toSatisfy(
-                        (error: unknown) =>
-                            error === undefined || typeof error === "string"
-                    );
-                }
-            ),
-            PARSER_FUZZ_PARAMETERS
-        );
+                ),
+                PARSER_FUZZ_PARAMETERS
+            );
+        }).not.toThrow();
     });
 
     it("keeps Markdown body detection and link ranges stable", () => {
         expect.hasAssertions();
 
-        fc.assert(
-            fc.property(
-                arbitraryText,
-                fc.nat({ max: 1_000_000 }),
-                (text, offset) => {
-                    const links = extractMarkdownLinks(text, offset);
+        expect(() => {
+            fc.assert(
+                fc.property(
+                    arbitraryText,
+                    fc.nat({ max: 1_000_000 }),
+                    (text, offset) => {
+                        const links = extractMarkdownLinks(text, offset);
 
-                    expect(hasMeaningfulMarkdownBody(text)).toBeTypeOf(
-                        "boolean"
-                    );
-                    expect(extractMarkdownLinks(text, offset)).toStrictEqual(
-                        links
-                    );
-                    expect(
-                        links.every((link, index) => {
-                            const previousLink = links[index - 1];
-
-                            return (
-                                previousLink === undefined ||
-                                link.start >= previousLink.end
-                            );
-                        })
-                    ).toBe(true);
-
-                    for (const link of links) {
-                        expect(link.start).toBeGreaterThanOrEqual(offset);
-                        expect(link.end).toBeGreaterThan(link.start);
-                        expect(link.end).toBeLessThanOrEqual(
-                            offset + text.length
+                        expect(hasMeaningfulMarkdownBody(text)).toBeTypeOf(
+                            "boolean"
                         );
-                        expect(link.text).toHaveLength(link.end - link.start);
-                        expect(link.rawDestination).not.toMatch(/[\n\r]/v);
+                        expect(
+                            extractMarkdownLinks(text, offset)
+                        ).toStrictEqual(links);
+                        expect(
+                            links.every((link, index) => {
+                                const previousLink = links[index - 1];
+
+                                return (
+                                    previousLink === undefined ||
+                                    link.start >= previousLink.end
+                                );
+                            })
+                        ).toBe(true);
+
+                        for (const link of links) {
+                            expect(link.start).toBeGreaterThanOrEqual(offset);
+                            expect(link.end).toBeGreaterThan(link.start);
+                            expect(link.end).toBeLessThanOrEqual(
+                                offset + text.length
+                            );
+                            expect(link.text).toHaveLength(
+                                link.end - link.start
+                            );
+                            expect(link.rawDestination).not.toMatch(/[\n\r]/v);
+                        }
                     }
-                }
-            ),
-            PARSER_FUZZ_PARAMETERS
-        );
+                ),
+                PARSER_FUZZ_PARAMETERS
+            );
+        }).not.toThrow();
     });
 
     it("round-trips arbitrary JSON values through the hook parser", () => {
         expect.hasAssertions();
 
-        fc.assert(
-            fc.property(
-                fc.jsonValue({ maxDepth: 6, stringUnit: "binary" }),
-                (value) => {
-                    const serialized = JSON.stringify(value);
+        expect(() => {
+            fc.assert(
+                fc.property(
+                    fc.jsonValue({ maxDepth: 6, stringUnit: "binary" }),
+                    (value) => {
+                        const serialized = JSON.stringify(value);
 
-                    expect(parseJsonText(serialized)).toStrictEqual(
-                        JSON.parse(serialized) as unknown
-                    );
-                }
-            ),
-            PARSER_FUZZ_PARAMETERS
-        );
+                        expect(parseJsonText(serialized)).toStrictEqual(
+                            JSON.parse(serialized) as unknown
+                        );
+                    }
+                ),
+                PARSER_FUZZ_PARAMETERS
+            );
+        }).not.toThrow();
     });
 });
 

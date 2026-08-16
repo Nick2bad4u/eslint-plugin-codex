@@ -66,6 +66,7 @@ const requireValidSkillDescriptionRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-skill-description"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             invalidDescription:
                 "Skill description must be a non-empty string no longer than 1024 characters.",

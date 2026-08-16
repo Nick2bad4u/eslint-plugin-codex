@@ -32,27 +32,27 @@ const requireExistingRelativeSkillLinksRule: CodexRuleModule = createCodexRule({
                     continue;
                 }
 
-                if (
-                    pathExists(
-                        resolveMarkdownWorkspaceLink(
-                            context.filename,
-                            link.destination
-                        )
+                const targetExists = pathExists(
+                    resolveMarkdownWorkspaceLink(
+                        context.filename,
+                        link.destination
                     )
-                ) {
-                    continue;
-                }
+                );
 
-                context.report({
-                    data: {
-                        destination: link.destination,
-                    },
-                    loc: {
-                        end: context.sourceCode.getLocFromIndex(link.end),
-                        start: context.sourceCode.getLocFromIndex(link.start),
-                    },
-                    messageId: "missingSkillLinkTarget",
-                });
+                if (!targetExists) {
+                    context.report({
+                        data: {
+                            destination: link.destination,
+                        },
+                        loc: {
+                            end: context.sourceCode.getLocFromIndex(link.end),
+                            start: context.sourceCode.getLocFromIndex(
+                                link.start
+                            ),
+                        },
+                        messageId: "missingSkillLinkTarget",
+                    });
+                }
             }
         },
     }),
@@ -67,6 +67,7 @@ const requireExistingRelativeSkillLinksRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-existing-relative-skill-links"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             missingSkillLinkTarget:
                 "Codex skill relative link `{{destination}}` does not resolve to an existing workspace path.",
