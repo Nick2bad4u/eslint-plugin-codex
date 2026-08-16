@@ -39,6 +39,7 @@ const noDeprecatedCustomPromptsRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-deprecated-custom-prompts"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             deprecatedCustomPrompt:
                 "Codex custom prompts are deprecated. Migrate this workflow to a skill under .agents/skills/<name>/SKILL.md.",

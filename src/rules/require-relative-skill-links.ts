@@ -58,6 +58,7 @@ const requireRelativeSkillLinksRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-relative-skill-links"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             nonRelativeSkillLink:
                 "Codex skill definition files should reference workspace resources with relative Markdown links, not `{{destination}}`.",

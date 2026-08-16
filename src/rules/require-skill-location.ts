@@ -44,6 +44,7 @@ const requireSkillLocationRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-skill-location"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             invalidSkillLocation:
                 "Place this skill at .agents/skills/<name>/SKILL.md, skills/<name>/SKILL.md in a plugin, or another Codex-supported Agent Skills root.",

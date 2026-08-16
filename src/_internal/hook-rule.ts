@@ -16,6 +16,9 @@ import {
 import { isJsonObject, parseJsonText } from "./hooks-json.js";
 import { isTomlObject } from "./toml-rule.js";
 
+const jsonDocumentVisitorKey = "Document" as const;
+const programVisitorKey = "Program" as const;
+
 /** A selected hooks value and the representation that supplied it. */
 export interface CodexHooksDocument {
     /** Static value of the top-level `hooks` property, if present. */
@@ -29,7 +32,7 @@ export const createHookDocumentListener = <MessageIds extends string>(
     context: Readonly<TSESLint.RuleContext<MessageIds, Readonly<UnknownArray>>>,
     lintDocument: (document: Readonly<CodexHooksDocument>) => void
 ): TSESLint.RuleListener => ({
-    Document(): void {
+    [jsonDocumentVisitorKey]: (): void => {
         if (!isHooksJsonFilePath(context.filename)) {
             return;
         }
@@ -41,7 +44,7 @@ export const createHookDocumentListener = <MessageIds extends string>(
             requiresHooksObject: true,
         });
     },
-    Program(node): void {
+    [programVisitorKey]: (node): void => {
         if (!isProjectConfigFilePath(context.filename)) {
             return;
         }

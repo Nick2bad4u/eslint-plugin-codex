@@ -94,6 +94,7 @@ const maxAgentsInstructionChainBytesRule: CodexRuleModule = createCodexRule<
             requiresTypeChecking: false,
             url: createRuleDocsUrl("max-agents-instruction-chain-bytes"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             instructionChainTooLarge:
                 "The active Codex instruction chain is {{actualBytes}} bytes, exceeding the {{maxBytes}}-byte limit. Split or shorten the guidance, or align this rule's maxBytes option with project_doc_max_bytes.",
@@ -109,7 +110,6 @@ const maxAgentsInstructionChainBytesRule: CodexRuleModule = createCodexRule<
                             description:
                                 "A project instruction filename without path separators.",
                             minLength: 1,
-                            // eslint-disable-next-line etc-misc/no-unnecessary-template-literal -- String.raw keeps the JSON Schema regex backslash unambiguous.
                             pattern: String.raw`^[^/\\]+$`,
                             type: "string",
                         },

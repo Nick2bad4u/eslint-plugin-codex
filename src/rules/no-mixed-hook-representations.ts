@@ -49,6 +49,7 @@ const noMixedHookRepresentationsRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-mixed-hook-representations"),
         },
+        languages: ["js/js"],
         messages: {
             mixedHookRepresentations:
                 "This .codex layer defines both hooks.json and inline [hooks]. Codex merges them and warns; keep one representation per layer.",

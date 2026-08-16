@@ -3,7 +3,7 @@
  * Codex AGENTS.md discovery and instruction-chain helpers.
  */
 import path from "node:path";
-import { stringSplit } from "ts-extras";
+import { isDefined, stringSplit } from "ts-extras";
 
 import {
     normalizeAbsolutePath,
@@ -56,6 +56,34 @@ const readCandidateText = (
         ? currentSourceText
         : readUtf8File(candidatePath);
 
+const findActiveInstructionFile = (
+    directory: string,
+    filenames: readonly string[],
+    currentFilePath: string,
+    currentSourceText: string
+): readonly [filePath: string, text: string] | undefined => {
+    for (const filename of filenames) {
+        const candidatePath = path.join(directory, filename);
+        const candidateExists =
+            isSamePath(candidatePath, currentFilePath) ||
+            pathExists(candidatePath);
+
+        if (candidateExists) {
+            const text = readCandidateText(
+                candidatePath,
+                currentFilePath,
+                currentSourceText
+            );
+
+            if (text.trim().length > 0) {
+                return [candidatePath, text];
+            }
+        }
+    }
+
+    return undefined;
+};
+
 /** One active instruction file and its cumulative chain byte count. */
 export type ActiveInstructionFile = Readonly<{
     cumulativeBytes: number;
@@ -88,32 +116,21 @@ export const getActiveInstructionChain = (
     let cumulativeBytes = 0;
 
     for (const directory of directories) {
-        for (const filename of filenames) {
-            const candidatePath = path.join(directory, filename);
+        const activeInstructionFile = findActiveInstructionFile(
+            directory,
+            filenames,
+            currentFilePath,
+            currentSourceText
+        );
 
-            if (
-                !isSamePath(candidatePath, currentFilePath) &&
-                !pathExists(candidatePath)
-            ) {
-                continue;
-            }
-
-            const text = readCandidateText(
-                candidatePath,
-                currentFilePath,
-                currentSourceText
-            );
-
-            if (text.trim().length === 0) {
-                continue;
-            }
+        if (isDefined(activeInstructionFile)) {
+            const [filePath, text] = activeInstructionFile;
 
             cumulativeBytes += Buffer.byteLength(text, "utf8");
             activeFiles.push({
                 cumulativeBytes,
-                filePath: candidatePath,
+                filePath,
             });
-            break;
         }
     }
 

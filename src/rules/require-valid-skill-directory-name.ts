@@ -52,6 +52,7 @@ const requireValidSkillDirectoryNameRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-skill-directory-name"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             invalidSkillDirectoryName:
                 "Skill directory names must be 1-64 characters, use lowercase letters, digits, and single hyphens, and may not start or end with a hyphen (current directory: `{{directoryName}}`).",

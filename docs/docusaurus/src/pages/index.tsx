@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
@@ -14,7 +16,7 @@ import {
  * Render the public landing page for `@typpi/eslint-plugin-codex`
  * documentation.
  */
-export default function Home(): React.JSX.Element {
+export default function Home(): JSX.Element {
     const logoSource = useBaseUrl("/img/logo.svg");
 
     return (
@@ -131,7 +133,7 @@ export default function Home(): React.JSX.Element {
     );
 }
 
-function ArrowRightIcon(): React.JSX.Element {
+function ArrowRightIcon(): JSX.Element {
     return (
         <svg aria-hidden className="ui-icon ui-icon--sm" viewBox="0 0 24 24">
             <path
@@ -146,7 +148,7 @@ function ArrowRightIcon(): React.JSX.Element {
     );
 }
 
-function getHomeIcon(icon: string | undefined): React.JSX.Element {
+function getHomeIcon(icon: string | undefined): JSX.Element {
     switch (icon) {
         case "overview": {
             return <OverviewIcon />;
@@ -166,7 +168,7 @@ function getHomeIcon(icon: string | undefined): React.JSX.Element {
     }
 }
 
-function OverviewIcon(): React.JSX.Element {
+function OverviewIcon(): JSX.Element {
     return (
         <svg aria-hidden className="ui-icon" viewBox="0 0 24 24">
             <path
@@ -181,7 +183,7 @@ function OverviewIcon(): React.JSX.Element {
     );
 }
 
-function PresetsIcon(): React.JSX.Element {
+function PresetsIcon(): JSX.Element {
     return (
         <svg aria-hidden className="ui-icon" viewBox="0 0 24 24">
             <path
@@ -199,7 +201,7 @@ function PresetsIcon(): React.JSX.Element {
     );
 }
 
-function RulesIcon(): React.JSX.Element {
+function RulesIcon(): JSX.Element {
     return (
         <svg aria-hidden className="ui-icon" viewBox="0 0 24 24">
             <path

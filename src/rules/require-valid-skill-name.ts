@@ -74,6 +74,7 @@ const requireValidSkillNameRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-skill-name"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             invalidSkillName:
                 "Skill names must be 1-64 characters, use lowercase letters, digits, and single hyphens, and may not start or end with a hyphen (current value: `{{name}}`).",

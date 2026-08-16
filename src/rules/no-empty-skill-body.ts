@@ -50,6 +50,7 @@ const noEmptySkillBodyRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-empty-skill-body"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             emptySkillBody:
                 "A Codex skill needs a non-empty Markdown body with instructions. Metadata alone cannot execute a workflow.",

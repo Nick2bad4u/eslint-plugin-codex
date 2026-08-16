@@ -66,6 +66,7 @@ const requireSkillNameMatchDirectoryRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-skill-name-match-directory"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             skillNameDoesNotMatchDirectory:
                 "Skill name `{{name}}` must match its parent directory name `{{directoryName}}`.",

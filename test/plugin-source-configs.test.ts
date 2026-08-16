@@ -154,20 +154,70 @@ describe("source plugin config wiring", () => {
         );
     });
 
+    it("keeps every rule language declaration aligned with its preset layers", () => {
+        expect.hasAssertions();
+
+        const [
+            markdownLayer,
+            tomlLayer,
+            jsonLayer,
+        ] = plugin.configs.all;
+
+        for (const [ruleName, rule] of Object.entries(plugin.rules)) {
+            const ruleId = `codex/${ruleName}`;
+            const isMarkdownRule = Object.hasOwn(
+                markdownLayer?.rules ?? {},
+                ruleId
+            );
+            const isJsonRule = Object.hasOwn(jsonLayer?.rules ?? {}, ruleId);
+            const expectedLanguages = isMarkdownRule
+                ? ["markdown/gfm"]
+                : isJsonRule
+                  ? ["js/js", "json/json"]
+                  : ["js/js"];
+
+            expect(Object.hasOwn(tomlLayer?.rules ?? {}, ruleId)).toBe(
+                !isMarkdownRule
+            );
+
+            if (rule.meta === undefined) {
+                throw new TypeError(`Rule ${ruleName} has no metadata.`);
+            }
+
+            expect(rule.meta.languages).toStrictEqual(expectedLanguages);
+        }
+    });
+
+    it("rejects a Markdown-only rule under an actual JSON language", async () => {
+        expect.hasAssertions();
+
+        const eslint = new ESLint({
+            overrideConfig: [
+                {
+                    files: ["**/*.json"],
+                    language: "json/json",
+                    plugins: { codex: plugin, json: jsonPlugin },
+                    rules: { "codex/no-empty-agents-md": "error" },
+                },
+            ],
+            overrideConfigFile: true,
+        });
+
+        await expect(
+            eslint.lintText("{}\n", { filePath: ".codex/hooks.json" })
+        ).rejects.toThrow(/language.*json\/json/iv);
+    });
+
     it("does not evaluate non-Codex program ASTs as TOML", async () => {
         expect.hasAssertions();
 
-        const rules = Object.fromEntries(
-            Object.keys(plugin.rules).map((ruleName) => [
-                `codex/${ruleName}`,
-                "error" as const,
-            ])
-        );
         const eslint = new ESLint({
             overrideConfig: [
                 {
                     plugins: { codex: plugin },
-                    rules,
+                    rules: {
+                        "codex/no-conflicting-mcp-tool-lists": "error",
+                    },
                 },
             ],
             overrideConfigFile: true,

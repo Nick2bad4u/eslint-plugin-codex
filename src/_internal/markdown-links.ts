@@ -2,7 +2,7 @@
  * @packageDocumentation
  * Shared Markdown link extraction helpers for Codex customization files.
  */
-import { stringSplit } from "ts-extras";
+import { isDefined, stringSplit } from "ts-extras";
 
 import {
     isNonRelativeWorkspacePath,
@@ -53,6 +53,76 @@ const extractMarkdownLinkDestination = (rawDestination: string): string => {
     return destination?.trim() ?? "";
 };
 
+type MarkdownLinkScanResult = Readonly<{
+    link?: MarkdownLinkMatch;
+    searchOffset: number;
+}>;
+
+/** Scan one candidate Markdown link from the supplied source offset. */
+const scanMarkdownLink = (
+    maskedText: string,
+    searchOffset: number,
+    offset: number
+): MarkdownLinkScanResult | undefined => {
+    const textStart = maskedText.indexOf("[", searchOffset);
+
+    if (textStart === -1) {
+        return undefined;
+    }
+
+    if (textStart > 0 && maskedText[textStart - 1] === "!") {
+        return { searchOffset: textStart + 1 };
+    }
+
+    const textEnd = maskedText.indexOf("](", textStart + 1);
+
+    if (textEnd === -1) {
+        return undefined;
+    }
+
+    const linkText = maskedText.slice(textStart + 1, textEnd);
+
+    if (
+        linkText.length === 0 ||
+        linkText.includes("]") ||
+        linkText.includes("\n") ||
+        linkText.includes("\r")
+    ) {
+        return { searchOffset: textStart + 1 };
+    }
+
+    const destinationStart = textEnd + 2;
+    const destinationEnd = maskedText.indexOf(")", destinationStart);
+
+    if (destinationEnd === -1) {
+        return undefined;
+    }
+
+    const rawDestination = maskedText.slice(destinationStart, destinationEnd);
+
+    if (
+        rawDestination.length === 0 ||
+        rawDestination.includes("\n") ||
+        rawDestination.includes("\r")
+    ) {
+        return { searchOffset: textStart + 1 };
+    }
+
+    const matchedText = maskedText.slice(textStart, destinationEnd + 1);
+    const start = offset + textStart;
+
+    return {
+        link: {
+            destination: extractMarkdownLinkDestination(rawDestination),
+            end: start + matchedText.length,
+            rawDestination,
+            start,
+            text: matchedText,
+        },
+        searchOffset: destinationEnd + 1,
+    };
+};
+
 /** Extract Markdown links from text while ignoring code spans and fences. */
 export const extractMarkdownLinks = (
     text: string,
@@ -63,68 +133,17 @@ export const extractMarkdownLinks = (
     let searchOffset = 0;
 
     while (searchOffset < maskedText.length) {
-        const textStart = maskedText.indexOf("[", searchOffset);
+        const result = scanMarkdownLink(maskedText, searchOffset, offset);
 
-        if (textStart === -1) {
+        if (!isDefined(result)) {
             break;
         }
 
-        if (textStart > 0 && maskedText[textStart - 1] === "!") {
-            searchOffset = textStart + 1;
-            continue;
+        if (isDefined(result.link)) {
+            links.push(result.link);
         }
 
-        const textEnd = maskedText.indexOf("](", textStart + 1);
-
-        if (textEnd === -1) {
-            break;
-        }
-
-        const linkText = maskedText.slice(textStart + 1, textEnd);
-
-        if (
-            linkText.length === 0 ||
-            linkText.includes("]") ||
-            linkText.includes("\n") ||
-            linkText.includes("\r")
-        ) {
-            searchOffset = textStart + 1;
-            continue;
-        }
-
-        const destinationStart = textEnd + 2;
-        const destinationEnd = maskedText.indexOf(")", destinationStart);
-
-        if (destinationEnd === -1) {
-            break;
-        }
-
-        const rawDestination = maskedText.slice(
-            destinationStart,
-            destinationEnd
-        );
-
-        if (
-            rawDestination.length === 0 ||
-            rawDestination.includes("\n") ||
-            rawDestination.includes("\r")
-        ) {
-            searchOffset = textStart + 1;
-            continue;
-        }
-
-        const matchedText = maskedText.slice(textStart, destinationEnd + 1);
-        const start = offset + textStart;
-
-        links.push({
-            destination: extractMarkdownLinkDestination(rawDestination),
-            end: start + matchedText.length,
-            rawDestination,
-            start,
-            text: matchedText,
-        });
-
-        searchOffset = destinationEnd + 1;
+        searchOffset = result.searchOffset;
     }
 
     return links;

@@ -108,6 +108,7 @@ const noDuplicateSkillNamesRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-duplicate-skill-names"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             duplicateSkillName:
                 "Skill name `{{name}}` appears more than once: {{files}}. Codex lists duplicate names separately, which can make selection ambiguous.",

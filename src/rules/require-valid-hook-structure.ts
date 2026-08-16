@@ -12,9 +12,83 @@ import {
     getHookEventEntriesFromHooks,
     isJsonArray,
     isJsonObject,
+    type JsonArray,
 } from "../_internal/hooks-json.js";
 import { reportAtDocumentStart } from "../_internal/markdown-rule.js";
 import { createRuleDocsUrl } from "../_internal/rule-docs-url.js";
+
+type HookStructureProblem = Readonly<{
+    data: Readonly<Record<string, string>>;
+    messageId:
+        | "invalidHandler"
+        | "invalidHandlers"
+        | "invalidMatcherGroup"
+        | "invalidMatcherGroups"
+        | "missingCommand";
+}>;
+
+const getHandlerProblems = (
+    eventName: string,
+    groupIndex: string,
+    handlers: JsonArray
+): readonly HookStructureProblem[] =>
+    handlers.flatMap<HookStructureProblem>((handler, handlerIndex) => {
+        const data = {
+            eventName,
+            groupIndex,
+            handlerIndex: String(handlerIndex),
+        };
+
+        if (!isJsonObject(handler)) {
+            return [{ data, messageId: "invalidHandler" as const }];
+        }
+
+        if (
+            handler["type"] === "command" &&
+            (typeof handler["command"] !== "string" ||
+                handler["command"].trim().length === 0)
+        ) {
+            return [{ data, messageId: "missingCommand" as const }];
+        }
+
+        return [];
+    });
+
+const getMatcherGroupProblems = (
+    eventName: string,
+    rawGroups: unknown
+): readonly HookStructureProblem[] => {
+    if (!isJsonArray(rawGroups) || isEmpty(rawGroups)) {
+        return [
+            {
+                data: { eventName },
+                messageId: "invalidMatcherGroups",
+            },
+        ];
+    }
+
+    return rawGroups.flatMap<HookStructureProblem>(
+        (rawGroup, groupIndex): readonly HookStructureProblem[] => {
+            const stringGroupIndex = String(groupIndex);
+            const data = {
+                eventName,
+                groupIndex: stringGroupIndex,
+            };
+
+            if (!isJsonObject(rawGroup)) {
+                return [{ data, messageId: "invalidMatcherGroup" as const }];
+            }
+
+            const handlers = rawGroup["hooks"];
+
+            if (!isJsonArray(handlers) || isEmpty(handlers)) {
+                return [{ data, messageId: "invalidHandlers" as const }];
+            }
+
+            return getHandlerProblems(eventName, stringGroupIndex, handlers);
+        }
+    );
+};
 
 /** Validate the event, matcher-group, and handler levels of hooks.json. */
 const requireValidHookStructureRule: CodexRuleModule = createCodexRule({
@@ -30,69 +104,14 @@ const requireValidHookStructureRule: CodexRuleModule = createCodexRule({
             for (const [eventName, rawGroups] of getHookEventEntriesFromHooks(
                 document.hooks
             )) {
-                if (!isJsonArray(rawGroups) || isEmpty(rawGroups)) {
+                for (const problem of getMatcherGroupProblems(
+                    eventName,
+                    rawGroups
+                )) {
                     reportAtDocumentStart(context, {
-                        data: {
-                            eventName,
-                        },
-                        messageId: "invalidMatcherGroups",
+                        data: problem.data,
+                        messageId: problem.messageId,
                     });
-                    continue;
-                }
-
-                for (const [groupIndex, rawGroup] of rawGroups.entries()) {
-                    if (!isJsonObject(rawGroup)) {
-                        reportAtDocumentStart(context, {
-                            data: {
-                                eventName,
-                                groupIndex: String(groupIndex),
-                            },
-                            messageId: "invalidMatcherGroup",
-                        });
-                        continue;
-                    }
-
-                    const handlers = rawGroup["hooks"];
-
-                    if (!isJsonArray(handlers) || isEmpty(handlers)) {
-                        reportAtDocumentStart(context, {
-                            data: {
-                                eventName,
-                                groupIndex: String(groupIndex),
-                            },
-                            messageId: "invalidHandlers",
-                        });
-                        continue;
-                    }
-
-                    for (const [handlerIndex, handler] of handlers.entries()) {
-                        if (!isJsonObject(handler)) {
-                            reportAtDocumentStart(context, {
-                                data: {
-                                    eventName,
-                                    groupIndex: String(groupIndex),
-                                    handlerIndex: String(handlerIndex),
-                                },
-                                messageId: "invalidHandler",
-                            });
-                            continue;
-                        }
-
-                        if (
-                            handler["type"] === "command" &&
-                            (typeof handler["command"] !== "string" ||
-                                handler["command"].trim().length === 0)
-                        ) {
-                            reportAtDocumentStart(context, {
-                                data: {
-                                    eventName,
-                                    groupIndex: String(groupIndex),
-                                    handlerIndex: String(handlerIndex),
-                                },
-                                messageId: "missingCommand",
-                            });
-                        }
-                    }
                 }
             }
         }),
@@ -112,6 +131,7 @@ const requireValidHookStructureRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-hook-structure"),
         },
+        languages: ["js/js", "json/json"],
         messages: {
             invalidHandler:
                 "{{eventName}} matcher group {{groupIndex}} handler {{handlerIndex}} must be an object.",

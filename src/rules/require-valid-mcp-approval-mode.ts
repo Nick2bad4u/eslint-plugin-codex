@@ -14,6 +14,7 @@ import {
     getTomlObject,
     isTomlObject,
     reportTomlDocumentProblem,
+    type TomlObject,
 } from "../_internal/toml-rule.js";
 
 const VALID_APPROVAL_MODES: ReadonlySet<string> = new Set([
@@ -25,6 +26,19 @@ const VALID_APPROVAL_MODES: ReadonlySet<string> = new Set([
 
 const isValidApprovalMode = (value: unknown): boolean =>
     typeof value === "string" && setHas(VALID_APPROVAL_MODES, value);
+
+const getInvalidToolApprovalFields = (tools: TomlObject): readonly string[] =>
+    objectEntries(tools).flatMap(([toolName, rawTool]) => {
+        if (!isTomlObject(rawTool)) {
+            return [];
+        }
+
+        const toolMode = rawTool["approval_mode"];
+
+        return isDefined(toolMode) && !isValidApprovalMode(toolMode)
+            ? [`tools.${toolName}.approval_mode`]
+            : [];
+    });
 
 /** Validate MCP server and per-tool approval modes. */
 const requireValidMcpApprovalModeRule: CodexRuleModule = createCodexRule({
@@ -46,40 +60,20 @@ const requireValidMcpApprovalModeRule: CodexRuleModule = createCodexRule({
                 }
 
                 const defaultMode = rawServer["default_tools_approval_mode"];
-
-                if (
-                    isDefined(defaultMode) &&
+                const invalidFields = [
+                    ...(isDefined(defaultMode) &&
                     !isValidApprovalMode(defaultMode)
-                ) {
+                        ? ["default_tools_approval_mode"]
+                        : []),
+                    ...getInvalidToolApprovalFields(
+                        getTomlObject(rawServer, "tools") ?? {}
+                    ),
+                ];
+
+                for (const field of invalidFields) {
                     reportTomlDocumentProblem(context, {
                         data: {
-                            field: "default_tools_approval_mode",
-                            serverName,
-                        },
-                        messageId: "invalidApprovalMode",
-                    });
-                }
-
-                const tools = getTomlObject(rawServer, "tools");
-
-                if (!isDefined(tools)) {
-                    continue;
-                }
-
-                for (const [toolName, rawTool] of objectEntries(tools)) {
-                    if (!isTomlObject(rawTool)) {
-                        continue;
-                    }
-
-                    const toolMode = rawTool["approval_mode"];
-
-                    if (!isDefined(toolMode) || isValidApprovalMode(toolMode)) {
-                        continue;
-                    }
-
-                    reportTomlDocumentProblem(context, {
-                        data: {
-                            field: `tools.${toolName}.approval_mode`,
+                            field,
                             serverName,
                         },
                         messageId: "invalidApprovalMode",
@@ -102,6 +96,7 @@ const requireValidMcpApprovalModeRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-mcp-approval-mode"),
         },
+        languages: ["js/js"],
         messages: {
             invalidApprovalMode:
                 "MCP server `{{serverName}}` has an unsupported {{field}}. Use auto, prompt, writes, or approve.",

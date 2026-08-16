@@ -42,36 +42,34 @@ const requireValidMcpTransportRule: CodexRuleModule = createCodexRule({
             }
 
             for (const [serverName, rawServer] of objectEntries(servers)) {
-                if (!isTomlObject(rawServer)) {
+                if (isTomlObject(rawServer)) {
+                    const command = getTomlString(rawServer, "command");
+                    const url = getTomlString(rawServer, "url");
+
+                    if (!isDefined(command) && !isDefined(url)) {
+                        reportTomlDocumentProblem(context, {
+                            data: {
+                                serverName,
+                            },
+                            messageId: "missingTransport",
+                        });
+                    }
+
+                    if (isDefined(url) && !isHttpUrl(url)) {
+                        reportTomlDocumentProblem(context, {
+                            data: {
+                                serverName,
+                                url,
+                            },
+                            messageId: "invalidHttpUrl",
+                        });
+                    }
+                } else {
                     reportTomlDocumentProblem(context, {
                         data: {
                             serverName,
                         },
                         messageId: "invalidServerTable",
-                    });
-                    continue;
-                }
-
-                const command = getTomlString(rawServer, "command");
-                const url = getTomlString(rawServer, "url");
-
-                if (!isDefined(command) && !isDefined(url)) {
-                    reportTomlDocumentProblem(context, {
-                        data: {
-                            serverName,
-                        },
-                        messageId: "missingTransport",
-                    });
-                    continue;
-                }
-
-                if (isDefined(url) && !isHttpUrl(url)) {
-                    reportTomlDocumentProblem(context, {
-                        data: {
-                            serverName,
-                            url,
-                        },
-                        messageId: "invalidHttpUrl",
                     });
                 }
             }
@@ -91,6 +89,7 @@ const requireValidMcpTransportRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-mcp-transport"),
         },
+        languages: ["js/js"],
         messages: {
             invalidHttpUrl:
                 "MCP server `{{serverName}}` has an invalid HTTP URL: `{{url}}`.",

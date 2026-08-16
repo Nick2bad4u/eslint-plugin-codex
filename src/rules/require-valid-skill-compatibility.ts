@@ -65,6 +65,7 @@ const requireValidSkillCompatibilityRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-skill-compatibility"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             invalidCompatibility:
                 "Skill compatibility must be a non-empty string no longer than 500 characters.",

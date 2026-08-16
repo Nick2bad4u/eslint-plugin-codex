@@ -56,6 +56,7 @@ const requireValidSkillLicenseRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-skill-license"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             invalidSkillLicense:
                 "Skill license metadata must be a non-empty string when present.",

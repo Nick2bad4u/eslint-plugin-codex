@@ -30,6 +30,26 @@ describe("hook rules", () => {
             "invalidMatcherGroups",
         ],
         [
+            "require-valid-hook-structure",
+            '{"hooks":{"PreToolUse":[null]}}',
+            "invalidMatcherGroup",
+        ],
+        [
+            "require-valid-hook-structure",
+            '{"hooks":{"PreToolUse":[{}]}}',
+            "invalidHandlers",
+        ],
+        [
+            "require-valid-hook-structure",
+            '{"hooks":{"PreToolUse":[{"hooks":[null]}]}}',
+            "invalidHandler",
+        ],
+        [
+            "require-valid-hook-structure",
+            '{"hooks":{"PreToolUse":[{"hooks":[{"type":"command"}]}]}}',
+            "missingCommand",
+        ],
+        [
             "require-valid-hook-events",
             '{"hooks":{"BeforeEverything":[]}}',
             "invalidHookEvent",
@@ -118,6 +138,21 @@ describe("hook rules", () => {
                 messageIdsFor(ruleId, ".codex/config.toml", toml)
             ).resolves.toHaveLength(0);
         }
+    });
+
+    it("ignores malformed advisory-rule groups and handlers", async () => {
+        expect.hasAssertions();
+
+        const json =
+            '{"hooks":{"PreToolUse":[null,{"hooks":"invalid"},{"hooks":[null,{"type":"command","command":"echo ok"}]}]}}';
+
+        await expect(
+            messageIdsFor(
+                "no-unsupported-hook-handler",
+                ".codex/hooks.json",
+                json
+            )
+        ).resolves.toHaveLength(0);
     });
 
     it("ignores GitHub Copilot hook files", async () => {

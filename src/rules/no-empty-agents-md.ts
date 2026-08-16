@@ -50,6 +50,7 @@ const noEmptyAgentsMdRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-empty-agents-md"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             emptyInstructions:
                 "Codex ignores empty instruction files. Add actionable Markdown guidance or remove this file.",

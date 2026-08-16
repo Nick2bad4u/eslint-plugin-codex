@@ -73,6 +73,7 @@ const requireSkillFrontmatterRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-skill-frontmatter"),
         },
+        languages: ["markdown/gfm"],
         messages: {
             invalidFrontmatter:
                 "Skill frontmatter is not valid YAML: {{error}}",

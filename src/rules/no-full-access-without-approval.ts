@@ -39,6 +39,7 @@ const noFullAccessWithoutApprovalRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-full-access-without-approval"),
         },
+        languages: ["js/js"],
         messages: {
             unboundedExecution:
                 'danger-full-access with approval_policy = "never" removes both sandbox and approval boundaries. Use a tighter sandbox or an approval policy unless this risk is explicitly required.',

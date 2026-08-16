@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
 import Heading from "@theme/Heading";
@@ -12,7 +14,7 @@ import {
 } from "../components/siteData";
 
 /** Render the project-signal page for releases, quality, and package links. */
-export default function ProjectPage(): React.JSX.Element {
+export default function ProjectPage(): JSX.Element {
     const relatedPages = [
         {
             description:
