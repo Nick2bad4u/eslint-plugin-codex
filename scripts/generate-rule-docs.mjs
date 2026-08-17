@@ -29,7 +29,7 @@ const sentenceCase = (value) =>
 
 /** @param {string} value */
 const escapeMarkdownText = (value) =>
-    value.replaceAll("[", "\\[").replaceAll("]", "\\]");
+    value.replaceAll("[", String.raw`\[`).replaceAll("]", String.raw`\]`);
 
 /** @param {string} ruleName */
 const sourceForRule = (ruleName) => {
@@ -205,7 +205,9 @@ const renderRulePage = (ruleName, rule) => {
 
 let changed = false;
 
-for (const ruleName of Object.keys(plugin.rules).toSorted()) {
+for (const ruleName of Object.keys(plugin.rules).toSorted((left, right) =>
+    left.localeCompare(right)
+)) {
     const rule = plugin.rules[ruleName];
 
     if (!isRecord(rule)) {

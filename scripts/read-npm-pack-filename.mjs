@@ -9,11 +9,15 @@ for await (const chunk of process.stdin) {
 }
 
 const packOutput = JSON.parse(chunks.join(""));
-const entries = Array.isArray(packOutput)
-    ? packOutput
-    : typeof packOutput === "object" && packOutput !== null
-      ? Object.values(packOutput)
-      : [];
+/** @type {unknown[]} */
+let entries = [];
+
+if (Array.isArray(packOutput)) {
+    entries = packOutput;
+} else if (typeof packOutput === "object" && packOutput !== null) {
+    entries = Object.values(packOutput);
+}
+
 const [firstEntry] = entries;
 
 if (

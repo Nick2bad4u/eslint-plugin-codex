@@ -14,6 +14,7 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import pc from "picocolors";
+import { remark } from "remark";
 
 const argv = process.argv.slice(2);
 const isVerbose = argv.includes("--verbose") || argv.includes("-v");
@@ -67,10 +68,6 @@ const IGNORED_DIRECTORIES = new Set([
     ".stryker-tmp",
 ]);
 
-// Capture Markdown links like [text](url) and images ![alt](url)
-// NOTE: for more accuracy use a Markdown parser (remark) instead of regex.
-const LINK_PATTERN = /!?\[[^\]]*]\(([^)]+)\)/g;
-
 const EXTERNAL_PROTOCOLS = [
     "http:",
     "https:",
@@ -81,6 +78,43 @@ const EXTERNAL_PROTOCOLS = [
     "vscode:",
     "file:",
 ];
+
+/**
+ * Parse Markdown links without regex backtracking or matching fenced code.
+ *
+ * @param {string} content
+ *
+ * @returns {{ isImage: boolean; link: string }[]}
+ */
+const extractMarkdownLinks = (content) => {
+    /** @type {{ isImage: boolean; link: string }[]} */
+    const links = [];
+    /** @type {unknown[]} */
+    const nodes = [remark().parse(content)];
+
+    while (nodes.length > 0) {
+        const node = nodes.pop();
+
+        if (typeof node !== "object" || node === null) {
+            continue;
+        }
+
+        const type = Reflect.get(node, "type");
+        const url = Reflect.get(node, "url");
+
+        if ((type === "image" || type === "link") && typeof url === "string") {
+            links.push({ isImage: type === "image", link: url });
+        }
+
+        const children = Reflect.get(node, "children");
+
+        if (Array.isArray(children)) {
+            nodes.push(...children.toReversed());
+        }
+    }
+
+    return links;
+};
 
 /**
  * Truncate safely keeping last `max` codepoints
@@ -303,9 +337,7 @@ async function checkFile(markdownPath, issues, issueSet, metrics) {
     }
 
     const content = await readFile(markdownPath, "utf8");
-    // Skip fenced code blocks
-    const contentWithoutCodeBlocks = content.replaceAll(/```[\s\S]*?```/g, "");
-    const matches = Array.from(contentWithoutCodeBlocks.matchAll(LINK_PATTERN));
+    const matches = extractMarkdownLinks(content);
 
     if (matches.length === 0) {
         metrics.filesWithNoLinks++;
@@ -314,23 +346,22 @@ async function checkFile(markdownPath, issues, issueSet, metrics) {
     }
 
     for (const match of matches) {
-        const fullMatch = match[0];
-        const link = match[1];
-        if (fullMatch.startsWith("!")) {
+        const { isImage, link } = match;
+
+        if (isImage) {
             metrics.imageLinksIgnored++;
             continue;
         }
-        if (link) {
-            const broken = await validateLink(
-                markdownPath,
-                link,
-                issues,
-                issueSet,
-                metrics
-            );
-            if (broken && failFast) {
-                throw new Error("Fail-fast triggered due to broken link");
-            }
+
+        const broken = await validateLink(
+            markdownPath,
+            link,
+            issues,
+            issueSet,
+            metrics
+        );
+        if (broken && failFast) {
+            throw new Error("Fail-fast triggered due to broken link");
         }
     }
 }
