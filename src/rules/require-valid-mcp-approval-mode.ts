@@ -96,7 +96,7 @@ const requireValidMcpApprovalModeRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-mcp-approval-mode"),
         },
-        languages: ["js/js"],
+        languages: ["js/js", "toml/toml"],
         messages: {
             invalidApprovalMode:
                 "MCP server `{{serverName}}` has an unsupported {{field}}. Use auto, prompt, writes, or approve.",

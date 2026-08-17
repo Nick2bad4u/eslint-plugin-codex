@@ -1,12 +1,13 @@
 import * as jsonPluginModule from "@eslint/json";
 import * as markdownPluginModule from "@eslint/markdown";
 import { ESLint, type Linter } from "eslint";
+import tomlPlugin from "eslint-plugin-toml";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
 import { describe, expect, it } from "vitest";
 
-import plugin from "../src/plugin";
+import plugin, { type CodexPresetLayer } from "../src/plugin";
 
 const jsonPlugin = jsonPluginModule.default as ESLint.Plugin;
 const markdownPlugin = markdownPluginModule.default as ESLint.Plugin;
@@ -51,6 +52,16 @@ const lintFixtureFiles = async (
     } finally {
         await fs.rm(root, { force: true, recursive: true });
     }
+};
+
+const getRecommendedTomlLayer = (): CodexPresetLayer => {
+    const tomlLayer = plugin.configs.recommended.at(1);
+
+    if (tomlLayer === undefined) {
+        throw new TypeError("The recommended TOML preset layer is missing.");
+    }
+
+    return tomlLayer;
 };
 
 describe("source plugin config wiring", () => {
@@ -154,6 +165,24 @@ describe("source plugin config wiring", () => {
         );
     });
 
+    it("supports TOML rules under the actual toml/toml language", async () => {
+        expect.hasAssertions();
+
+        const tomlLayer = getRecommendedTomlLayer();
+        const messages = await lintFixtureFiles([
+            {
+                files: ["**/*.toml"],
+                language: "toml/toml",
+                plugins: { codex: plugin, toml: tomlPlugin },
+                rules: tomlLayer.rules,
+            },
+        ]);
+
+        expect(messages.map((message) => message.messageId)).toContain(
+            "missingAgentField"
+        );
+    });
+
     it("keeps every rule language declaration aligned with its preset layers", () => {
         expect.hasAssertions();
 
@@ -170,15 +199,18 @@ describe("source plugin config wiring", () => {
                 ruleId
             );
             const isJsonRule = Object.hasOwn(jsonLayer?.rules ?? {}, ruleId);
+            const isTomlRule = Object.hasOwn(tomlLayer?.rules ?? {}, ruleId);
             const expectedLanguages = isMarkdownRule
                 ? ["markdown/gfm"]
                 : isJsonRule
-                  ? ["js/js", "json/json"]
-                  : ["js/js"];
+                  ? [
+                        "js/js",
+                        "json/json",
+                        "toml/toml",
+                    ]
+                  : ["js/js", "toml/toml"];
 
-            expect(Object.hasOwn(tomlLayer?.rules ?? {}, ruleId)).toBe(
-                !isMarkdownRule
-            );
+            expect(isTomlRule).toBe(!isMarkdownRule);
 
             if (rule.meta === undefined) {
                 throw new TypeError(`Rule ${ruleName} has no metadata.`);

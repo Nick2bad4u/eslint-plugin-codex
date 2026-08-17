@@ -102,7 +102,7 @@ const requireValidAgentNicknameCandidatesRule: CodexRuleModule =
                     "require-valid-agent-nickname-candidates"
                 ),
             },
-            languages: ["js/js"],
+            languages: ["js/js", "toml/toml"],
             messages: {
                 duplicateNicknameCandidates:
                     "Codex custom-agent nickname candidates must be unique.",

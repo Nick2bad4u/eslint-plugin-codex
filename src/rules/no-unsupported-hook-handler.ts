@@ -77,7 +77,11 @@ const noUnsupportedHookHandlerRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-unsupported-hook-handler"),
         },
-        languages: ["js/js", "json/json"],
+        languages: [
+            "js/js",
+            "json/json",
+            "toml/toml",
+        ],
         messages: {
             unsupportedAsyncHandler:
                 "Codex skips async handlers for {{eventName}}. Remove async or set it to false.",

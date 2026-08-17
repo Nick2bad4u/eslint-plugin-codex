@@ -89,7 +89,7 @@ const requireValidMcpTransportRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-mcp-transport"),
         },
-        languages: ["js/js"],
+        languages: ["js/js", "toml/toml"],
         messages: {
             invalidHttpUrl:
                 "MCP server `{{serverName}}` has an invalid HTTP URL: `{{url}}`.",

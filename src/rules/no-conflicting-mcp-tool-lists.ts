@@ -83,7 +83,7 @@ const noConflictingMcpToolListsRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-conflicting-mcp-tool-lists"),
         },
-        languages: ["js/js"],
+        languages: ["js/js", "toml/toml"],
         messages: {
             conflictingToolLists:
                 "MCP server `{{serverName}}` enables and disables the same tools: {{tools}}. Codex applies the deny list after the allow list.",

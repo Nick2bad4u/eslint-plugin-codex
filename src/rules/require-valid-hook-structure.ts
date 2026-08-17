@@ -131,7 +131,11 @@ const requireValidHookStructureRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-valid-hook-structure"),
         },
-        languages: ["js/js", "json/json"],
+        languages: [
+            "js/js",
+            "json/json",
+            "toml/toml",
+        ],
         messages: {
             invalidHandler:
                 "{{eventName}} matcher group {{groupIndex}} handler {{handlerIndex}} must be an object.",

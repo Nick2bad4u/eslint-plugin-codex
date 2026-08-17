@@ -63,7 +63,7 @@ const noIgnoredProjectConfigKeysRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-ignored-project-config-keys"),
         },
-        languages: ["js/js"],
+        languages: ["js/js", "toml/toml"],
         messages: {
             ignoredProjectConfigKey:
                 "Codex ignores `{{key}}` in project config. Move it to the appropriate user, profile, or managed layer.",

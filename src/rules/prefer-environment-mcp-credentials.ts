@@ -79,7 +79,7 @@ const preferEnvironmentMcpCredentialsRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("prefer-environment-mcp-credentials"),
         },
-        languages: ["js/js"],
+        languages: ["js/js", "toml/toml"],
         messages: {
             literalCredentialHeader:
                 "MCP server `{{serverName}}` stores sensitive header `{{headerName}}` as a literal. Use bearer_token_env_var or env_http_headers so credentials stay outside config.",

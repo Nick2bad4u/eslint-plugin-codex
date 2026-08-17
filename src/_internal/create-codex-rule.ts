@@ -32,7 +32,8 @@ export type CodexRuleDocs = Readonly<{
 export type CodexRuleLanguage =
     | "js/js"
     | "json/json"
-    | "markdown/gfm";
+    | "markdown/gfm"
+    | "toml/toml";
 
 /** Public runtime rule module shape emitted by this plugin. */
 export type CodexRuleModule = BaseCodexRuleModule &

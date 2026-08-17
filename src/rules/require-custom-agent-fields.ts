@@ -58,7 +58,7 @@ const requireCustomAgentFieldsRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("require-custom-agent-fields"),
         },
-        languages: ["js/js"],
+        languages: ["js/js", "toml/toml"],
         messages: {
             missingAgentField:
                 "Codex custom agents must declare a non-empty string `{{field}}` field.",

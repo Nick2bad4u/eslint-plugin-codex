@@ -70,7 +70,7 @@ const noDeprecatedConfigFeaturesRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-deprecated-config-features"),
         },
-        languages: ["js/js"],
+        languages: ["js/js", "toml/toml"],
         messages: {
             deprecatedFeature:
                 "Codex feature `{{key}}` is deprecated. Use {{replacement}} instead.",

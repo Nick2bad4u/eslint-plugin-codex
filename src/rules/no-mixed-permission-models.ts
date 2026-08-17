@@ -52,7 +52,7 @@ const noMixedPermissionModelsRule: CodexRuleModule = createCodexRule({
             requiresTypeChecking: false,
             url: createRuleDocsUrl("no-mixed-permission-models"),
         },
-        languages: ["js/js"],
+        languages: ["js/js", "toml/toml"],
         messages: {
             mixedPermissionModels:
                 "Named permissions and legacy sandbox settings do not compose; sandbox_mode or sandbox_workspace_write takes precedence. Choose one permission model.",
