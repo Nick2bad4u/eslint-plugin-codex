@@ -6,6 +6,8 @@ Objective ESLint checks for Codex customization files. The plugin validates the 
 
 This is an independent community project. It is not affiliated with, endorsed by, or maintained by OpenAI.
 
+> **Oxlint:** Not compatible as a complete plugin (verified with Oxlint 1.80.0); all 32 rules and every preset target Markdown, TOML, or JSON and require [custom formats or parsers that Oxlint JavaScript plugins do not support](https://oxc.rs/docs/guide/usage/linter/js-plugins.html#api-support), so use ESLint for this plugin.
+
 ## Supported files
 
 - `AGENTS.md` and `AGENTS.override.md` instruction chains
